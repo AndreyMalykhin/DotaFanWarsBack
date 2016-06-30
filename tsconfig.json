@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "sourceMap": true,
+        "target": "es6",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "noEmitOnError": true,
+        "allowJs": true
+    },
+    "filesGlob": [
+        "src/**/*.ts",
+        "typings/**/*.ts",
+        "!node_modules/**"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "compileOnSave": false,
+    "atom": {
+        "rewriteTsconfig": false
+    }
+}

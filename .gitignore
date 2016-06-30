@@ -1,0 +1,14 @@
+/node_modules
+/build
+/typings/globals
+/typings/modules
+/typings/index.d.ts
+/.vagrant
+/.env
+/.awcache
+/GPATH
+/GRTAGS
+/GTAGS
+*.DS_Store
+*.tern-port
+*.log
