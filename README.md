@@ -1,0 +1,10 @@
+### Credits
+- [Node.js](https://nodejs.org/en/)
+- [Express](http://expressjs.com/)
+- [Socket.IO](http://socket.io/)
+- [Mongoose](http://mongoosejs.com/)
+- [MongoDB](https://www.mongodb.com/)
+- [Webpack](https://webpack.github.io/)
+- [Babel](https://babeljs.io/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [Dota 2](http://blog.dota2.com/)
