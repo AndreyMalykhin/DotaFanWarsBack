@@ -39,10 +39,6 @@ export default class DotaTeamMonitor {
         return this.dotaService.getLiveLeagueGames()
             .then((response) => {
                 return this.preProcessTeams(response.result.games);
-            }, (error) => {
-                // TODO
-                log(error);
-                throw error;
             })
             .then(([dotaTeams, currentTeams, teamLogos]) => {
                 return this.processTeams(
@@ -50,12 +46,6 @@ export default class DotaTeamMonitor {
             }, (error) => {
                 // TODO
                 log(error);
-                throw error;
-            })
-            .catch((error) => {
-                // TODO
-                log(error);
-                throw error;
             });
     }
 
@@ -95,7 +85,7 @@ export default class DotaTeamMonitor {
     ) {
         log('processTeams(); dotaTeams=%o; currentTeams=%o; teamLogos=%o',
             dotaTeams, currentTeams, teamLogos);
-        const teamLogoMap = _.keyBy(teamLogos, 'id');
+        const teamLogoMap = _.keyBy(teamLogos, (logo) => logo && logo.id);
         const currentTeamMap = _.keyBy(currentTeams, 'dotaId');
         const nextTeams: Team[] = [];
 
@@ -123,7 +113,13 @@ export default class DotaTeamMonitor {
         for (let logoId of logoIds) {
             const promise = this.dotaService.getUGCFileDetails(logoId)
                 .then((response) => {
-                    return {id: logoId, url: response.data.url};
+                    const {status, data} = response;
+
+                    if (status && status.code == 9) {
+                        return null;
+                    }
+
+                    return {id: logoId, url: data.url};
                 });
             promises.push(promise);
         }

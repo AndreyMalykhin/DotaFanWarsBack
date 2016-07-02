@@ -1,4 +1,4 @@
-import JSONbig = require('json-bigint');
+const JSONbig = require('json-bigint');
 import debug = require('debug');
 import fetch = require('isomorphic-fetch');
 

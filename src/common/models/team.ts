@@ -3,7 +3,7 @@ import mongoose = require('mongoose');
 interface Team extends mongoose.Document {
     dotaId: string;
     name: string;
-    logoUrl: string;
+    logoUrl?: string;
     rating: number;
 }
 export default Team;

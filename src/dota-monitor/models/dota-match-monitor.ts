@@ -13,7 +13,8 @@ import {filterInterestingGames} from
 const log = debug('dfw:DotaMatchMonitor');
 
 export default class DotaMatchMonitor {
-    private tickRate = 8000;
+    // TODO
+    private tickRate = 64000;
 
     constructor(
         private dotaService: DotaService,
@@ -42,22 +43,12 @@ export default class DotaMatchMonitor {
         return this.dotaService.getLiveLeagueGames()
             .then((response) => {
                 return this.preProcessMatches(response);
-            }, (error) => {
-                // TODO
-                log(error);
-                throw error;
             })
             .then(([dotaMatches, matches, teams]) => {
                 return this.processMatches(dotaMatches, matches, teams);
             }, (error) => {
                 // TODO
                 log(error);
-                throw error;
-            })
-            .catch((error) => {
-                // TODO
-                log(error);
-                throw error;
             });
     }
 

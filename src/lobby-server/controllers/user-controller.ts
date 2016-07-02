@@ -1,9 +1,17 @@
 import Bottle = require('bottlejs');
 import express = require('express');
+import HttpStatus = require('http-status-codes');
+import UserService from '../../common/models/user-service';
+import ApiResponse from '../../common/utils/api-response';
+import User, {UserType} from '../../common/models/user';
+import Country from '../../common/models/country';
 
 export default function factory(diContainer: Bottle.IContainer) {
     const controller = express.Router();
-    controller.put('/:id/photo', function(req, res) {
+    const userService: UserService = (<any> diContainer).userService;
+    controller.all('/me', (<any> diContainer).authorizationHandler);
+
+    controller.put('/me/photo', function(req, res) {
         setTimeout(function() {
             // res.json({
             //     status: 400,
@@ -16,7 +24,7 @@ export default function factory(diContainer: Bottle.IContainer) {
         }, 1000);
     });
 
-    controller.put('/:id', function(req, res) {
+    controller.put('/me', function(req, res, next) {
         setTimeout(function() {
             // res.json({
             //     status: 400,
@@ -29,45 +37,71 @@ export default function factory(diContainer: Bottle.IContainer) {
         }, 1000);
     });
 
-    controller.get('/:id', function(req, res) {
-        setTimeout(function() {
-            res.json({
-                status: 200,
-                data: {
-                    rating: 7777,
-                    nickname: 'Some very long nickname',
-                    countryId: '2',
-                    photoUrl: 'https://placekitten.com/512/512'
-                }
+    controller.get('/me', function(req, res, next) {
+        UserType.populate(req.user, {path: 'country'})
+            .then((user) => {
+                res.json(<ApiResponse> {
+                    status: HttpStatus.OK,
+                    data: transformUser(user)
+                });
+            }, (error) => {
+                next(error);
             });
-        }, 1000);
     });
 
-    controller.get('/', function(req, res) {
-        console.assert(req.query.leaderboard !== undefined);
-        setTimeout(function() {
-            res.json({
-                status: 200,
-                data: [
-                    {
-                        id: '1',
-                        rating: 7777,
-                        nickname: 'Some very long nickname',
-                        country: {
-                            flagUrl: 'http://dotafanwarsfront.local:8080/countries/US.png'
-                        }
-                    },
-                    {
-                        id: '2',
-                        rating: 777,
-                        nickname: 'Some very long nickname 2',
-                        country: {
-                            flagUrl: 'http://dotafanwarsfront.local:8080/countries/UA.png'
-                        }
-                    }
-                ]
+    controller.get('/:id', function(req, res, next) {
+        userService.get({_id: req.params.id}).populate('country').exec()
+            .then((user) => {
+                res.json(<ApiResponse> {
+                    status: HttpStatus.OK,
+                    data: transformUser(user)
+                });
+            }, (error) => {
+                next(error);
             });
-        }, 1000);
+    });
+
+    controller.get('/', function(req, res, next) {
+        if (req.query.leaderboard === undefined) {
+            return next();
+        }
+
+        userService.getAll()
+            .populate('country')
+            .sort('-rating')
+            .limit(100)
+            .exec()
+            .then((users) => {
+                res.json(<ApiResponse> {
+                    status: HttpStatus.OK,
+                    data: users.map(transformUser)
+                });
+            }, (error) => {
+                next(error);
+            });
     });
     return controller;
+}
+
+function transformUser(user: User) {
+    const {id, rating, nickname, photoUrl, country} = user;
+    let transformedCountry: Object;
+
+    if (country) {
+        const {id: countryId, name: countryName, flagUrl: countryFlagUrl} =
+            <Country> country;
+        transformedCountry = {
+            id: countryId,
+            name: countryName,
+            flagUrl: countryFlagUrl
+        }
+    }
+
+    return {
+        id: id,
+        rating: rating,
+        nickname: nickname,
+        photoUrl: photoUrl,
+        country: transformedCountry
+    };
 }

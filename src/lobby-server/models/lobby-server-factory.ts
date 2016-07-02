@@ -1,9 +1,12 @@
+import debug = require('debug');
 import Bottle = require('bottlejs');
 import express = require('express');
 import logger = require('morgan');
 import cookieParser = require('cookie-parser');
 import bodyParser = require('body-parser');
 import cors = require('cors');
+import passport = require('passport');
+import HttpStatus = require('http-status-codes');
 import ApiResponse from '../../common/utils/api-response';
 import authControllerFactory from '../controllers/auth-controller';
 import userControllerFactory from '../controllers/user-controller';
@@ -11,6 +14,8 @@ import countryControllerFactory from '../controllers/country-controller';
 import matchControllerFactory from '../controllers/match-controller';
 import matchScheduleControllerFactory from
     '../controllers/match-schedule-controller';
+
+const log = debug('dfw:LobbyServer');
 
 export default function lobbyServerFactory(diContainer: Bottle.IContainer) {
     const server = express();
@@ -24,8 +29,10 @@ export default function lobbyServerFactory(diContainer: Bottle.IContainer) {
         maxAge: 60 * 60 * 24
     }));
     server.use(bodyParser.json());
-    server.use(bodyParser.urlencoded({ extended: false }));
+    server.use(bodyParser.urlencoded({extended: false}));
     server.use(cookieParser());
+    const authService: passport.Passport = (<any> diContainer).authService;
+    server.use(authService.initialize());
     server.use(errorHandler);
 
     server.use('/v1/login', authControllerFactory(diContainer));
@@ -41,7 +48,8 @@ export default function lobbyServerFactory(diContainer: Bottle.IContainer) {
 
 function errorHandler(err: any, req: express.Request, res: express.Response,
     next: express.NextFunction) {
-    const status = 500;
+    log(err);
+    const status = HttpStatus.INTERNAL_SERVER_ERROR;
     res.status(status);
 
     if (process.env.DFWB_DEV == '1') {
@@ -57,9 +65,9 @@ function errorHandler(err: any, req: express.Request, res: express.Response,
 
 function missingResourceHandler(req: express.Request, res: express.Response,
     next: express.NextFunction) {
-    const status = 404;
+    const status = HttpStatus.NOT_FOUND;
     res.status(status).json(<ApiResponse> {
         status: status,
-        error: {msg: 'Not found'}
+        error: {msg: 'Damn, not found'}
     });
 }

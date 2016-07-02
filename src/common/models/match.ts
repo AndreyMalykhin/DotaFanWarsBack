@@ -1,5 +1,8 @@
 import mongoose = require('mongoose');
-import Team from './team';
+import Team, {TeamType} from './team';
+
+// to prevent module elision
+TeamType;
 
 interface Match extends mongoose.Document {
     dotaId: string;
