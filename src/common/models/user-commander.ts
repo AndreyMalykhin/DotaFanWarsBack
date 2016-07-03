@@ -28,4 +28,8 @@ export default class UserCommander {
 
         return this.userService.save(user);
     }
+
+    update(user: User) {
+        return this.userService.save(user);
+    }
 }

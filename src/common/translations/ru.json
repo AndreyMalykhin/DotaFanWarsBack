@@ -1,0 +1,6 @@
+{
+    "validationErrors": {
+        "required": "Обязательно",
+        "length": "Слишком большая длина"
+    }
+}

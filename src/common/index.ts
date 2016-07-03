@@ -11,17 +11,24 @@ import TeamService from './models/team-service';
 import DotaService from './models/dota-service';
 import UserService from './models/user-service';
 import UserCommander from './models/user-commander';
+import Translator from './utils/translator';
+import {addTranslations} from './utils/translator-utils';
 
 const log = debug('dfw:CommonModule');
 
 export default class CommonModule implements Module {
     preBootstrap(di: Bottle) {
+        di.constant('facebookAppId', process.env.DFWB_FACEBOOK_APP_ID);
+        di.constant('facebookAppSecret', process.env.DFWB_FACEBOOK_APP_SECRET);
+        di.constant('googleAppId', process.env.DFWB_GOOGLE_APP_ID);
+        di.constant('googleAppSecret', process.env.DFWB_GOOGLE_APP_SECRET);
         di.constant('secretKey', process.env.DFWB_SECRET_KEY);
         di.constant('steamApiKey', process.env.DFWB_STEAM_API_KEY);
-        di.factory('socketIO', function(diContainer: Bottle.IContainer) {
+        di.factory('socketIO', (diContainer) => {
             return socketIO((<any> diContainer).httpServer,
                 {transports: ['websocket', 'polling']});
         });
+        di.service('translator', <any> Translator);
         di.service('eventBus', <any> events.EventEmitter);
         di.service('dotaService', <any> DotaService, 'steamApiKey');
         di.service('matchService', <any> MatchService);
@@ -34,12 +41,13 @@ export default class CommonModule implements Module {
     }
 
     bootstrap(diContainer: Bottle.IContainer) {
+        const translator: Translator = (<any> diContainer).translator;
+        addTranslations(translator, `${__dirname}/translations`);
+
         mongoose.Promise = <any> Promise;
         return new Promise(function(resolve, reject) {
             mongoose.connect(process.env.DFWB_DB_URL, function(error: any) {
                 if (error) {
-                    // TODO
-                    log(error);
                     reject(error);
                     return;
                 }

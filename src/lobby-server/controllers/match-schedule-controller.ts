@@ -18,34 +18,19 @@ export default function factory(diContainer: Bottle.IContainer) {
                     return Promise.all([[], matchCount]);
                 }
 
-                const offset = Math.min(
-                    (req.query.page - 1) * itemsPerPage,
-                    Math.max(matchCount - itemsPerPage, 0)
-                );
                 const promise = matchService.getAll()
                     .sort('-id')
-                    .skip(offset)
+                    .skip(Math.max((req.query.page - 1) * itemsPerPage, 0))
                     .limit(itemsPerPage)
                     .populate('radiant.team dire.team')
                     .exec();
                 return Promise.all([promise, matchCount]);
             })
             .then(([matches, matchCount]) => {
-                const items = matches.map((match) => {
-                    const {startDate, id, radiant, dire} = match;
-                    return {
-                        id: id,
-                        startDate: startDate,
-                        teams: [
-                            transformTeam(<Team> radiant.team),
-                            transformTeam(<Team> dire.team)
-                        ]
-                    };
-                });
                 res.json(<ApiResponse> {
                     status: HttpStatus.OK,
                     data: {
-                        items: items,
+                        items: matches.map(transformMatch),
                         pageCount: Math.ceil(matchCount / itemsPerPage)
                     }
                 });
@@ -62,5 +47,17 @@ function transformTeam(team: Team) {
         id: id,
         name: name,
         logoUrl: logoUrl
+    };
+}
+
+function transformMatch(match: Match) {
+    const {startDate, id, radiant, dire} = match;
+    return {
+        id: id,
+        startDate: startDate,
+        teams: [
+            transformTeam(<Team> radiant.team),
+            transformTeam(<Team> dire.team)
+        ]
     };
 }

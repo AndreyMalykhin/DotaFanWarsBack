@@ -33,6 +33,8 @@ export default function lobbyServerFactory(diContainer: Bottle.IContainer) {
     server.use(cookieParser());
     const authService: passport.Passport = (<any> diContainer).authService;
     server.use(authService.initialize());
+    const localeHandler = (<any> diContainer).localeHandler;
+    server.use(localeHandler);
     server.use(errorHandler);
 
     server.use('/v1/login', authControllerFactory(diContainer));

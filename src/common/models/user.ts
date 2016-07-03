@@ -1,4 +1,5 @@
 import mongoose = require('mongoose');
+import validator = require('validator');
 import Country, {CountryType} from './country';
 
 // to prevent module elision
@@ -18,7 +19,11 @@ export default User;
 
 const schema = new mongoose.Schema(
     {
-        nickname: {type: String, required: true, maxlength: 128},
+        nickname: {
+            type: String,
+            required: [true, 'validationErrors.required'],
+            maxlength: [64, 'validationErrors.length']
+        },
         email: {type: String, required: true, index: true},
         photoUrl: String,
         rating: {type: Number, required: true, default: 0},

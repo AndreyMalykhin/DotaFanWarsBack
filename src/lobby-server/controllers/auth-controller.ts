@@ -40,7 +40,7 @@ export default function factory(diContainer: Bottle.IContainer) {
                     jwt.sign(
                         {id: user.id},
                         (<any> diContainer).secretKey,
-                        null,
+                        {expiresIn: '365 days'},
                         (error, accessToken) => {
                             if (error) {
                                 return next(error);
