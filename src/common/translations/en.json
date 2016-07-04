@@ -1,6 +1,7 @@
 {
     "validationErrors": {
         "required": "Required",
-        "length": "Too long"
+        "length": "Too long",
+        "fileSize": "Max allowed file size is %{size} MB"
     }
 }

@@ -22,6 +22,7 @@ export default function lobbyServerFactory(diContainer: Bottle.IContainer) {
 
     if (process.env.DFWB_DEV == '1') {
         server.use(logger('dev'));
+        server.use(express.static((<any> diContainer).staticDirPath));
     }
 
     server.use(cors({

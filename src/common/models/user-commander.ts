@@ -1,3 +1,6 @@
+const sharp = require('sharp');
+import uuid = require('node-uuid');
+import path = require('path');
 import debug = require('debug');
 import passport = require('passport');
 import User, {UserType} from './user';
@@ -7,7 +10,11 @@ import {GOOGLE, FACEBOOK} from '../utils/auth-provider-id';
 const log = debug('dfw:UserCommander');
 
 export default class UserCommander {
-    constructor(private userService: UserService) {}
+    constructor(
+        private userService: UserService,
+        private staticDirPath: string,
+        private staticDirUrl: string
+    ) {}
 
     add(profile: passport.Profile) {
         log('add(); profile=%o', profile);
@@ -30,6 +37,18 @@ export default class UserCommander {
     }
 
     update(user: User) {
+        log('update(); user=%o', user);
         return this.userService.save(user);
+    }
+
+    setPhoto(user: User, file: Buffer, fileName: string): Promise<User> {
+        log('setPhoto(); user=%o; fileName=%o', user, fileName);
+        const newFileName = `${uuid.v4()}${path.extname(fileName)}`;
+        const outputFilePath = path.join(this.staticDirPath, newFileName);
+        return sharp(file).resize(128, 128).max().toFile(outputFilePath)
+            .then(() => {
+                user.photoUrl = `${this.staticDirUrl}/${newFileName}`;
+                return this.userService.save(user);
+            });
     }
 }

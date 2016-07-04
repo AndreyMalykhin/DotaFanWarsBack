@@ -1,3 +1,5 @@
+import multer = require('multer');
+import stream = require('stream');
 import _ = require('lodash');
 import Bottle = require('bottlejs');
 import express = require('express');
@@ -15,21 +17,26 @@ export default function factory(diContainer: Bottle.IContainer) {
     const userCommander: UserCommander = (<any> diContainer).userCommander;
     const translator: Translator = (<any> diContainer).translator;
 
-    controller.all('/me', (<any> diContainer).authorizationHandler);
+    controller.all('/me*', (<any> diContainer).authorizationHandler);
 
-    controller.put('/me/photo', function(req, res, next) {
-
-        // setTimeout(function() {
-            // res.json({
-            //     status: 400,
-            //     data: {file: 'Oh no no no!'}
-            // });
-            // res.json({
-            //     status: 200,
-            //     data: {url: 'https://placekitten.com/512/512'}
-            // });
-        // }, 1000);
-    });
+    const maxFileSize = 1024 * 1024;
+    controller.put(
+        '/me/photo',
+        multer({
+            limits: {fieldSize: maxFileSize, fileSize: maxFileSize},
+            storage: multer.memoryStorage()
+        }).single('file'),
+        (req, res, next) => {
+            const file = req.file;
+            userCommander.setPhoto(req.user, file.buffer, file.originalname)
+                .then((user) => {
+                    res.json(<ApiResponse> {
+                        status: HttpStatus.OK,
+                        data: {url: user.photoUrl}
+                    });
+                }, next);
+        }
+    );
 
     controller.put('/me', function(req, res, next) {
         const user = <User> req.user;
@@ -87,9 +94,7 @@ export default function factory(diContainer: Bottle.IContainer) {
                     status: HttpStatus.OK,
                     data: transformUser(user)
                 });
-            }, (error) => {
-                next(error);
-            });
+            }, next);
     });
 
     controller.get('/', function(req, res, next) {
@@ -107,9 +112,7 @@ export default function factory(diContainer: Bottle.IContainer) {
                     status: HttpStatus.OK,
                     data: users.map(transformUser)
                 });
-            }, (error) => {
-                next(error);
-            });
+            }, next);
     });
     return controller;
 }

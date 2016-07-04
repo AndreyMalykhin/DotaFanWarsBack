@@ -1,3 +1,5 @@
+import fs = require('fs');
+import mkdirp = require('mkdirp');
 import debug = require('debug');
 import events = require('events');
 import mongoose = require('mongoose');
@@ -18,6 +20,8 @@ const log = debug('dfw:CommonModule');
 
 export default class CommonModule implements Module {
     preBootstrap(di: Bottle) {
+        di.constant('staticDirPath', process.env.DFWB_STATIC_DIR_PATH);
+        di.constant('staticDirUrl', process.env.DFWB_STATIC_DIR_URL);
         di.constant('facebookAppId', process.env.DFWB_FACEBOOK_APP_ID);
         di.constant('facebookAppSecret', process.env.DFWB_FACEBOOK_APP_SECRET);
         di.constant('googleAppId', process.env.DFWB_GOOGLE_APP_ID);
@@ -37,16 +41,25 @@ export default class CommonModule implements Module {
             'eventBus');
         di.service('teamCommander', <any> TeamCommander, 'teamService');
         di.service('userService', <any> UserService);
-        di.service('userCommander', <any> UserCommander, 'userService');
+        di.service('userCommander', <any> UserCommander, 'userService',
+            'staticDirPath', 'staticDirUrl');
     }
 
     bootstrap(diContainer: Bottle.IContainer) {
-        const translator: Translator = (<any> diContainer).translator;
-        addTranslations(translator, `${__dirname}/translations`);
-
-        mongoose.Promise = <any> Promise;
         return new Promise(function(resolve, reject) {
-            mongoose.connect(process.env.DFWB_DB_URL, function(error: any) {
+            const staticDirPath: string = (<any> diContainer).staticDirPath;
+
+            try {
+                fs.statSync(staticDirPath);
+            } catch (error) {
+                mkdirp.sync(staticDirPath);
+            }
+
+            const translator: Translator = (<any> diContainer).translator;
+            addTranslations(translator, `${__dirname}/translations`);
+
+            mongoose.Promise = <any> Promise;
+            mongoose.connect(process.env.DFWB_DB_URL, (error: any) => {
                 if (error) {
                     reject(error);
                     return;

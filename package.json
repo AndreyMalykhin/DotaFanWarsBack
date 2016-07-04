@@ -25,6 +25,7 @@
     "json-bigint": "^0.2.0",
     "jsonwebtoken": "^7.0.1",
     "lodash": "^4.13.1",
+    "mkdirp": "^0.5.1",
     "mongoose": "^4.5.2",
     "morgan": "^1.7.0",
     "multer": "^1.1.0",
@@ -35,6 +36,7 @@
     "passport-google-token": "^0.1.2",
     "passport-jwt": "^2.1.0",
     "serve-favicon": "^2.3.0",
+    "sharp": "^0.15.0",
     "socket.io": "^1.4.8",
     "validator": "^5.4.0"
   },
