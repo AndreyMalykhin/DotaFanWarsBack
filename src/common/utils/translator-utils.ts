@@ -3,11 +3,10 @@ import path = require('path');
 import glob = require('glob');
 import Translator from './translator';
 
-export function addTranslations(translator: Translator, dirPath: string) {
-    glob.sync(path.join(dirPath, '*.json')).forEach((filePath) => {
-        const translations =
-            JSON.parse(fs.readFileSync(filePath, 'utf8'));
-        const locale = path.basename(filePath, '.json');
+export function addTranslations(translator: Translator, requireContext: any) {
+    requireContext.keys().forEach((modulePath: string) => {
+        const translations = requireContext(modulePath);
+        const locale = path.basename(modulePath, '.json');
         translator.extend(locale, translations);
     });
 }

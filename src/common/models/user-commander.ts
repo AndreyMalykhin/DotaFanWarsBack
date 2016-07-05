@@ -13,7 +13,7 @@ export default class UserCommander {
     constructor(
         private userService: UserService,
         private staticDirPath: string,
-        private staticDirUrl: string
+        private staticUrl: string
     ) {}
 
     add(profile: passport.Profile) {
@@ -44,10 +44,11 @@ export default class UserCommander {
     setPhoto(user: User, file: Buffer, fileName: string): Promise<User> {
         log('setPhoto(); user=%o; fileName=%o', user, fileName);
         const newFileName = `${uuid.v4()}${path.extname(fileName)}`;
-        const outputFilePath = path.join(this.staticDirPath, newFileName);
+        const dirName = 'user-photos';
+        const outputFilePath = path.join(this.staticDirPath, dirName, newFileName);
         return sharp(file).resize(128, 128).max().toFile(outputFilePath)
             .then(() => {
-                user.photoUrl = `${this.staticDirUrl}/${newFileName}`;
+                user.photoUrl = `${this.staticUrl}/${dirName}/${newFileName}`;
                 return this.userService.save(user);
             });
     }

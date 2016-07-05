@@ -119,7 +119,7 @@ export default function factory(diContainer: Bottle.IContainer) {
 
 function transformUser(user: User) {
     const {id, rating, nickname, photoUrl, country} = user;
-    let transformedCountry: Object;
+    let transformedCountry: Object = null;
 
     if (country) {
         const {id: countryId, name: countryName, flagUrl: countryFlagUrl} =

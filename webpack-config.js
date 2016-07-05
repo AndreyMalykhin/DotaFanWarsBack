@@ -2,11 +2,21 @@ require('dotenv').config();
 var path = require('path');
 var webpack = require('webpack');
 var nodeExternals = require('webpack-node-externals');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var plugins = [
     new webpack.NoErrorsPlugin(),
     new webpack.BannerPlugin('require("source-map-support").install();',
-        {raw: true, entryOnly: false})
+        {raw: true, entryOnly: false}),
+    new CopyWebpackPlugin(
+        [
+            {
+                from: path.resolve(__dirname, 'src/migrator/migrations'),
+                to: 'migrations'
+            }
+        ],
+        {ignore: ['*.ts']}
+    )
 ];
 
 if (process.env.DFWB_DEV !== '1') {

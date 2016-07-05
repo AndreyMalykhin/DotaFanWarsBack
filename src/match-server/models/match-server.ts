@@ -48,14 +48,14 @@ export default class MatchServer {
                                     type: 'offensive',
                                     name: 'Some very long item name',
                                     price: itemPrices['1'],
-                                    photoUrl: 'http://dotafanwarsfront.local:8080/items/item-1.svg'
+                                    photoUrl: 'http://dotafanwarsfront.local:8080/items/beer.svg'
                                 },
                                 {
                                     id: '2',
                                     type: 'defensive',
                                     name: 'Some very long item name 2',
                                     price: itemPrices['2'],
-                                    photoUrl: 'http://dotafanwarsfront.local:8080/items/item-2.svg'
+                                    photoUrl: 'http://dotafanwarsfront.local:8080/items/chicken-leg.svg'
                                 }
                             ]
                         },

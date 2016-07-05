@@ -9,6 +9,7 @@ import MatchServerModule from './match-server';
 import LobbyServerModule from './lobby-server';
 import ChatServerModule from './chat-server';
 import DotaMonitorModule from './dota-monitor';
+import MigratorModule from './migrator';
 import {forEach} from './common/utils/promise-utils';
 
 const log = debug('dfw:bootstrap');
@@ -16,6 +17,7 @@ dotenv.config();
 const di = new Bottle();
 const modules: Module[] = [
     new CommonModule(),
+    new MigratorModule(),
     new RoomMonitorModule(),
     new MatchServerModule(),
     new LobbyServerModule(),

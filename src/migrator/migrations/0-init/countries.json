@@ -1,0 +1,950 @@
+[
+    {
+        "name": "Aruba",
+        "flagUrl": "{staticUrl}/countries/AW.png"
+    },
+    {
+        "name": "Afghanistan",
+        "flagUrl": "{staticUrl}/countries/AF.png"
+    },
+    {
+        "name": "Angola",
+        "flagUrl": "{staticUrl}/countries/AO.png"
+    },
+    {
+        "name": "Anguilla",
+        "flagUrl": "{staticUrl}/countries/AI.png"
+    },
+    {
+        "name": "Åland Islands",
+        "flagUrl": "{staticUrl}/countries/AX.png"
+    },
+    {
+        "name": "Albania",
+        "flagUrl": "{staticUrl}/countries/AL.png"
+    },
+    {
+        "name": "Andorra",
+        "flagUrl": "{staticUrl}/countries/AD.png"
+    },
+    {
+        "name": "United Arab Emirates",
+        "flagUrl": "{staticUrl}/countries/AE.png"
+    },
+    {
+        "name": "Argentina",
+        "flagUrl": "{staticUrl}/countries/AR.png"
+    },
+    {
+        "name": "Armenia",
+        "flagUrl": "{staticUrl}/countries/AM.png"
+    },
+    {
+        "name": "American Samoa",
+        "flagUrl": "{staticUrl}/countries/AS.png"
+    },
+    {
+        "name": "Antarctica",
+        "flagUrl": "{staticUrl}/countries/AQ.png"
+    },
+    {
+        "name": "French Southern and Antarctic Lands",
+        "flagUrl": "{staticUrl}/countries/TF.png"
+    },
+    {
+        "name": "Antigua and Barbuda",
+        "flagUrl": "{staticUrl}/countries/AG.png"
+    },
+    {
+        "name": "Australia",
+        "flagUrl": "{staticUrl}/countries/AU.png"
+    },
+    {
+        "name": "Austria",
+        "flagUrl": "{staticUrl}/countries/AT.png"
+    },
+    {
+        "name": "Azerbaijan",
+        "flagUrl": "{staticUrl}/countries/AZ.png"
+    },
+    {
+        "name": "Burundi",
+        "flagUrl": "{staticUrl}/countries/BI.png"
+    },
+    {
+        "name": "Belgium",
+        "flagUrl": "{staticUrl}/countries/BE.png"
+    },
+    {
+        "name": "Benin",
+        "flagUrl": "{staticUrl}/countries/BJ.png"
+    },
+    {
+        "name": "Burkina Faso",
+        "flagUrl": "{staticUrl}/countries/BF.png"
+    },
+    {
+        "name": "Bangladesh",
+        "flagUrl": "{staticUrl}/countries/BD.png"
+    },
+    {
+        "name": "Bulgaria",
+        "flagUrl": "{staticUrl}/countries/BG.png"
+    },
+    {
+        "name": "Bahrain",
+        "flagUrl": "{staticUrl}/countries/BH.png"
+    },
+    {
+        "name": "Bahamas",
+        "flagUrl": "{staticUrl}/countries/BS.png"
+    },
+    {
+        "name": "Bosnia and Herzegovina",
+        "flagUrl": "{staticUrl}/countries/BA.png"
+    },
+    {
+        "name": "Saint Barthélemy",
+        "flagUrl": "{staticUrl}/countries/BL.png"
+    },
+    {
+        "name": "Belarus",
+        "flagUrl": "{staticUrl}/countries/BY.png"
+    },
+    {
+        "name": "Belize",
+        "flagUrl": "{staticUrl}/countries/BZ.png"
+    },
+    {
+        "name": "Bermuda",
+        "flagUrl": "{staticUrl}/countries/BM.png"
+    },
+    {
+        "name": "Bolivia",
+        "flagUrl": "{staticUrl}/countries/BO.png"
+    },
+    {
+        "name": "Brazil",
+        "flagUrl": "{staticUrl}/countries/BR.png"
+    },
+    {
+        "name": "Barbados",
+        "flagUrl": "{staticUrl}/countries/BB.png"
+    },
+    {
+        "name": "Brunei",
+        "flagUrl": "{staticUrl}/countries/BN.png"
+    },
+    {
+        "name": "Bhutan",
+        "flagUrl": "{staticUrl}/countries/BT.png"
+    },
+    {
+        "name": "Botswana",
+        "flagUrl": "{staticUrl}/countries/BW.png"
+    },
+    {
+        "name": "Central African Republic",
+        "flagUrl": "{staticUrl}/countries/CF.png"
+    },
+    {
+        "name": "Canada",
+        "flagUrl": "{staticUrl}/countries/CA.png"
+    },
+    {
+        "name": "Cocos (Keeling) Islands",
+        "flagUrl": "{staticUrl}/countries/CC.png"
+    },
+    {
+        "name": "Switzerland",
+        "flagUrl": "{staticUrl}/countries/CH.png"
+    },
+    {
+        "name": "Chile",
+        "flagUrl": "{staticUrl}/countries/CL.png"
+    },
+    {
+        "name": "China",
+        "flagUrl": "{staticUrl}/countries/CN.png"
+    },
+    {
+        "name": "Ivory Coast",
+        "flagUrl": "{staticUrl}/countries/CI.png"
+    },
+    {
+        "name": "Cameroon",
+        "flagUrl": "{staticUrl}/countries/CM.png"
+    },
+    {
+        "name": "DR Congo",
+        "flagUrl": "{staticUrl}/countries/CD.png"
+    },
+    {
+        "name": "Republic of the Congo",
+        "flagUrl": "{staticUrl}/countries/CG.png"
+    },
+    {
+        "name": "Cook Islands",
+        "flagUrl": "{staticUrl}/countries/CK.png"
+    },
+    {
+        "name": "Colombia",
+        "flagUrl": "{staticUrl}/countries/CO.png"
+    },
+    {
+        "name": "Comoros",
+        "flagUrl": "{staticUrl}/countries/KM.png"
+    },
+    {
+        "name": "Cape Verde",
+        "flagUrl": "{staticUrl}/countries/CV.png"
+    },
+    {
+        "name": "Costa Rica",
+        "flagUrl": "{staticUrl}/countries/CR.png"
+    },
+    {
+        "name": "Cuba",
+        "flagUrl": "{staticUrl}/countries/CU.png"
+    },
+    {
+        "name": "Curaçao",
+        "flagUrl": "{staticUrl}/countries/CW.png"
+    },
+    {
+        "name": "Christmas Island",
+        "flagUrl": "{staticUrl}/countries/CX.png"
+    },
+    {
+        "name": "Cayman Islands",
+        "flagUrl": "{staticUrl}/countries/KY.png"
+    },
+    {
+        "name": "Cyprus",
+        "flagUrl": "{staticUrl}/countries/CY.png"
+    },
+    {
+        "name": "Czech Republic",
+        "flagUrl": "{staticUrl}/countries/CZ.png"
+    },
+    {
+        "name": "Germany",
+        "flagUrl": "{staticUrl}/countries/DE.png"
+    },
+    {
+        "name": "Djibouti",
+        "flagUrl": "{staticUrl}/countries/DJ.png"
+    },
+    {
+        "name": "Dominica",
+        "flagUrl": "{staticUrl}/countries/DM.png"
+    },
+    {
+        "name": "Denmark",
+        "flagUrl": "{staticUrl}/countries/DK.png"
+    },
+    {
+        "name": "Dominican Republic",
+        "flagUrl": "{staticUrl}/countries/DO.png"
+    },
+    {
+        "name": "Algeria",
+        "flagUrl": "{staticUrl}/countries/DZ.png"
+    },
+    {
+        "name": "Ecuador",
+        "flagUrl": "{staticUrl}/countries/EC.png"
+    },
+    {
+        "name": "Egypt",
+        "flagUrl": "{staticUrl}/countries/EG.png"
+    },
+    {
+        "name": "Eritrea",
+        "flagUrl": "{staticUrl}/countries/ER.png"
+    },
+    {
+        "name": "Western Sahara",
+        "flagUrl": "{staticUrl}/countries/EH.png"
+    },
+    {
+        "name": "Spain",
+        "flagUrl": "{staticUrl}/countries/ES.png"
+    },
+    {
+        "name": "Estonia",
+        "flagUrl": "{staticUrl}/countries/EE.png"
+    },
+    {
+        "name": "Ethiopia",
+        "flagUrl": "{staticUrl}/countries/ET.png"
+    },
+    {
+        "name": "Finland",
+        "flagUrl": "{staticUrl}/countries/FI.png"
+    },
+    {
+        "name": "Fiji",
+        "flagUrl": "{staticUrl}/countries/FJ.png"
+    },
+    {
+        "name": "Falkland Islands",
+        "flagUrl": "{staticUrl}/countries/FK.png"
+    },
+    {
+        "name": "France",
+        "flagUrl": "{staticUrl}/countries/FR.png"
+    },
+    {
+        "name": "Faroe Islands",
+        "flagUrl": "{staticUrl}/countries/FO.png"
+    },
+    {
+        "name": "Micronesia",
+        "flagUrl": "{staticUrl}/countries/FM.png"
+    },
+    {
+        "name": "Gabon",
+        "flagUrl": "{staticUrl}/countries/GA.png"
+    },
+    {
+        "name": "United Kingdom",
+        "flagUrl": "{staticUrl}/countries/GB.png"
+    },
+    {
+        "name": "Georgia",
+        "flagUrl": "{staticUrl}/countries/GE.png"
+    },
+    {
+        "name": "Guernsey",
+        "flagUrl": "{staticUrl}/countries/GG.png"
+    },
+    {
+        "name": "Ghana",
+        "flagUrl": "{staticUrl}/countries/GH.png"
+    },
+    {
+        "name": "Gibraltar",
+        "flagUrl": "{staticUrl}/countries/GI.png"
+    },
+    {
+        "name": "Guinea",
+        "flagUrl": "{staticUrl}/countries/GN.png"
+    },
+    {
+        "name": "Gambia",
+        "flagUrl": "{staticUrl}/countries/GM.png"
+    },
+    {
+        "name": "Guinea-Bissau",
+        "flagUrl": "{staticUrl}/countries/GW.png"
+    },
+    {
+        "name": "Equatorial Guinea",
+        "flagUrl": "{staticUrl}/countries/GQ.png"
+    },
+    {
+        "name": "Greece",
+        "flagUrl": "{staticUrl}/countries/GR.png"
+    },
+    {
+        "name": "Grenada",
+        "flagUrl": "{staticUrl}/countries/GD.png"
+    },
+    {
+        "name": "Greenland",
+        "flagUrl": "{staticUrl}/countries/GL.png"
+    },
+    {
+        "name": "Guatemala",
+        "flagUrl": "{staticUrl}/countries/GT.png"
+    },
+    {
+        "name": "Guam",
+        "flagUrl": "{staticUrl}/countries/GU.png"
+    },
+    {
+        "name": "Guyana",
+        "flagUrl": "{staticUrl}/countries/GY.png"
+    },
+    {
+        "name": "Hong Kong",
+        "flagUrl": "{staticUrl}/countries/HK.png"
+    },
+    {
+        "name": "Honduras",
+        "flagUrl": "{staticUrl}/countries/HN.png"
+    },
+    {
+        "name": "Croatia",
+        "flagUrl": "{staticUrl}/countries/HR.png"
+    },
+    {
+        "name": "Haiti",
+        "flagUrl": "{staticUrl}/countries/HT.png"
+    },
+    {
+        "name": "Hungary",
+        "flagUrl": "{staticUrl}/countries/HU.png"
+    },
+    {
+        "name": "Indonesia",
+        "flagUrl": "{staticUrl}/countries/ID.png"
+    },
+    {
+        "name": "Isle of Man",
+        "flagUrl": "{staticUrl}/countries/IM.png"
+    },
+    {
+        "name": "India",
+        "flagUrl": "{staticUrl}/countries/IN.png"
+    },
+    {
+        "name": "Ireland",
+        "flagUrl": "{staticUrl}/countries/IE.png"
+    },
+    {
+        "name": "Iran",
+        "flagUrl": "{staticUrl}/countries/IR.png"
+    },
+    {
+        "name": "Iraq",
+        "flagUrl": "{staticUrl}/countries/IQ.png"
+    },
+    {
+        "name": "Iceland",
+        "flagUrl": "{staticUrl}/countries/IS.png"
+    },
+    {
+        "name": "Israel",
+        "flagUrl": "{staticUrl}/countries/IL.png"
+    },
+    {
+        "name": "Italy",
+        "flagUrl": "{staticUrl}/countries/IT.png"
+    },
+    {
+        "name": "Jamaica",
+        "flagUrl": "{staticUrl}/countries/JM.png"
+    },
+    {
+        "name": "Jersey",
+        "flagUrl": "{staticUrl}/countries/JE.png"
+    },
+    {
+        "name": "Jordan",
+        "flagUrl": "{staticUrl}/countries/JO.png"
+    },
+    {
+        "name": "Japan",
+        "flagUrl": "{staticUrl}/countries/JP.png"
+    },
+    {
+        "name": "Kazakhstan",
+        "flagUrl": "{staticUrl}/countries/KZ.png"
+    },
+    {
+        "name": "Kenya",
+        "flagUrl": "{staticUrl}/countries/KE.png"
+    },
+    {
+        "name": "Kyrgyzstan",
+        "flagUrl": "{staticUrl}/countries/KG.png"
+    },
+    {
+        "name": "Cambodia",
+        "flagUrl": "{staticUrl}/countries/KH.png"
+    },
+    {
+        "name": "Kiribati",
+        "flagUrl": "{staticUrl}/countries/KI.png"
+    },
+    {
+        "name": "Saint Kitts and Nevis",
+        "flagUrl": "{staticUrl}/countries/KN.png"
+    },
+    {
+        "name": "South Korea",
+        "flagUrl": "{staticUrl}/countries/KR.png"
+    },
+    {
+        "name": "Kuwait",
+        "flagUrl": "{staticUrl}/countries/KW.png"
+    },
+    {
+        "name": "Laos",
+        "flagUrl": "{staticUrl}/countries/LA.png"
+    },
+    {
+        "name": "Lebanon",
+        "flagUrl": "{staticUrl}/countries/LB.png"
+    },
+    {
+        "name": "Liberia",
+        "flagUrl": "{staticUrl}/countries/LR.png"
+    },
+    {
+        "name": "Libya",
+        "flagUrl": "{staticUrl}/countries/LY.png"
+    },
+    {
+        "name": "Saint Lucia",
+        "flagUrl": "{staticUrl}/countries/LC.png"
+    },
+    {
+        "name": "Liechtenstein",
+        "flagUrl": "{staticUrl}/countries/LI.png"
+    },
+    {
+        "name": "Sri Lanka",
+        "flagUrl": "{staticUrl}/countries/LK.png"
+    },
+    {
+        "name": "Lesotho",
+        "flagUrl": "{staticUrl}/countries/LS.png"
+    },
+    {
+        "name": "Lithuania",
+        "flagUrl": "{staticUrl}/countries/LT.png"
+    },
+    {
+        "name": "Luxembourg",
+        "flagUrl": "{staticUrl}/countries/LU.png"
+    },
+    {
+        "name": "Latvia",
+        "flagUrl": "{staticUrl}/countries/LV.png"
+    },
+    {
+        "name": "Macau",
+        "flagUrl": "{staticUrl}/countries/MO.png"
+    },
+    {
+        "name": "Saint Martin",
+        "flagUrl": "{staticUrl}/countries/MF.png"
+    },
+    {
+        "name": "Morocco",
+        "flagUrl": "{staticUrl}/countries/MA.png"
+    },
+    {
+        "name": "Monaco",
+        "flagUrl": "{staticUrl}/countries/MC.png"
+    },
+    {
+        "name": "Moldova",
+        "flagUrl": "{staticUrl}/countries/MD.png"
+    },
+    {
+        "name": "Madagascar",
+        "flagUrl": "{staticUrl}/countries/MG.png"
+    },
+    {
+        "name": "Maldives",
+        "flagUrl": "{staticUrl}/countries/MV.png"
+    },
+    {
+        "name": "Mexico",
+        "flagUrl": "{staticUrl}/countries/MX.png"
+    },
+    {
+        "name": "Marshall Islands",
+        "flagUrl": "{staticUrl}/countries/MH.png"
+    },
+    {
+        "name": "Macedonia",
+        "flagUrl": "{staticUrl}/countries/MK.png"
+    },
+    {
+        "name": "Mali",
+        "flagUrl": "{staticUrl}/countries/ML.png"
+    },
+    {
+        "name": "Malta",
+        "flagUrl": "{staticUrl}/countries/MT.png"
+    },
+    {
+        "name": "Myanmar",
+        "flagUrl": "{staticUrl}/countries/MM.png"
+    },
+    {
+        "name": "Montenegro",
+        "flagUrl": "{staticUrl}/countries/ME.png"
+    },
+    {
+        "name": "Mongolia",
+        "flagUrl": "{staticUrl}/countries/MN.png"
+    },
+    {
+        "name": "Northern Mariana Islands",
+        "flagUrl": "{staticUrl}/countries/MP.png"
+    },
+    {
+        "name": "Mozambique",
+        "flagUrl": "{staticUrl}/countries/MZ.png"
+    },
+    {
+        "name": "Mauritania",
+        "flagUrl": "{staticUrl}/countries/MR.png"
+    },
+    {
+        "name": "Montserrat",
+        "flagUrl": "{staticUrl}/countries/MS.png"
+    },
+    {
+        "name": "Martinique",
+        "flagUrl": "{staticUrl}/countries/MQ.png"
+    },
+    {
+        "name": "Mauritius",
+        "flagUrl": "{staticUrl}/countries/MU.png"
+    },
+    {
+        "name": "Malawi",
+        "flagUrl": "{staticUrl}/countries/MW.png"
+    },
+    {
+        "name": "Malaysia",
+        "flagUrl": "{staticUrl}/countries/MY.png"
+    },
+    {
+        "name": "Mayotte",
+        "flagUrl": "{staticUrl}/countries/YT.png"
+    },
+    {
+        "name": "Namibia",
+        "flagUrl": "{staticUrl}/countries/NA.png"
+    },
+    {
+        "name": "New Caledonia",
+        "flagUrl": "{staticUrl}/countries/NC.png"
+    },
+    {
+        "name": "Niger",
+        "flagUrl": "{staticUrl}/countries/NE.png"
+    },
+    {
+        "name": "Norfolk Island",
+        "flagUrl": "{staticUrl}/countries/NF.png"
+    },
+    {
+        "name": "Nigeria",
+        "flagUrl": "{staticUrl}/countries/NG.png"
+    },
+    {
+        "name": "Nicaragua",
+        "flagUrl": "{staticUrl}/countries/NI.png"
+    },
+    {
+        "name": "Niue",
+        "flagUrl": "{staticUrl}/countries/NU.png"
+    },
+    {
+        "name": "Netherlands",
+        "flagUrl": "{staticUrl}/countries/NL.png"
+    },
+    {
+        "name": "Norway",
+        "flagUrl": "{staticUrl}/countries/NO.png"
+    },
+    {
+        "name": "Nepal",
+        "flagUrl": "{staticUrl}/countries/NP.png"
+    },
+    {
+        "name": "Nauru",
+        "flagUrl": "{staticUrl}/countries/NR.png"
+    },
+    {
+        "name": "New Zealand",
+        "flagUrl": "{staticUrl}/countries/NZ.png"
+    },
+    {
+        "name": "Oman",
+        "flagUrl": "{staticUrl}/countries/OM.png"
+    },
+    {
+        "name": "Pakistan",
+        "flagUrl": "{staticUrl}/countries/PK.png"
+    },
+    {
+        "name": "Panama",
+        "flagUrl": "{staticUrl}/countries/PA.png"
+    },
+    {
+        "name": "Pitcairn Islands",
+        "flagUrl": "{staticUrl}/countries/PN.png"
+    },
+    {
+        "name": "Peru",
+        "flagUrl": "{staticUrl}/countries/PE.png"
+    },
+    {
+        "name": "Philippines",
+        "flagUrl": "{staticUrl}/countries/PH.png"
+    },
+    {
+        "name": "Palau",
+        "flagUrl": "{staticUrl}/countries/PW.png"
+    },
+    {
+        "name": "Papua New Guinea",
+        "flagUrl": "{staticUrl}/countries/PG.png"
+    },
+    {
+        "name": "Poland",
+        "flagUrl": "{staticUrl}/countries/PL.png"
+    },
+    {
+        "name": "Puerto Rico",
+        "flagUrl": "{staticUrl}/countries/PR.png"
+    },
+    {
+        "name": "North Korea",
+        "flagUrl": "{staticUrl}/countries/KP.png"
+    },
+    {
+        "name": "Portugal",
+        "flagUrl": "{staticUrl}/countries/PT.png"
+    },
+    {
+        "name": "Paraguay",
+        "flagUrl": "{staticUrl}/countries/PY.png"
+    },
+    {
+        "name": "Palestine",
+        "flagUrl": "{staticUrl}/countries/PS.png"
+    },
+    {
+        "name": "French Polynesia",
+        "flagUrl": "{staticUrl}/countries/PF.png"
+    },
+    {
+        "name": "Qatar",
+        "flagUrl": "{staticUrl}/countries/QA.png"
+    },
+    {
+        "name": "Romania",
+        "flagUrl": "{staticUrl}/countries/RO.png"
+    },
+    {
+        "name": "Russia",
+        "flagUrl": "{staticUrl}/countries/RU.png"
+    },
+    {
+        "name": "Rwanda",
+        "flagUrl": "{staticUrl}/countries/RW.png"
+    },
+    {
+        "name": "Saudi Arabia",
+        "flagUrl": "{staticUrl}/countries/SA.png"
+    },
+    {
+        "name": "Sudan",
+        "flagUrl": "{staticUrl}/countries/SD.png"
+    },
+    {
+        "name": "Senegal",
+        "flagUrl": "{staticUrl}/countries/SN.png"
+    },
+    {
+        "name": "Singapore",
+        "flagUrl": "{staticUrl}/countries/SG.png"
+    },
+    {
+        "name": "South Georgia",
+        "flagUrl": "{staticUrl}/countries/GS.png"
+    },
+    {
+        "name": "Solomon Islands",
+        "flagUrl": "{staticUrl}/countries/SB.png"
+    },
+    {
+        "name": "Sierra Leone",
+        "flagUrl": "{staticUrl}/countries/SL.png"
+    },
+    {
+        "name": "El Salvador",
+        "flagUrl": "{staticUrl}/countries/SV.png"
+    },
+    {
+        "name": "San Marino",
+        "flagUrl": "{staticUrl}/countries/SM.png"
+    },
+    {
+        "name": "Somalia",
+        "flagUrl": "{staticUrl}/countries/SO.png"
+    },
+    {
+        "name": "Serbia",
+        "flagUrl": "{staticUrl}/countries/RS.png"
+    },
+    {
+        "name": "South Sudan",
+        "flagUrl": "{staticUrl}/countries/SS.png"
+    },
+    {
+        "name": "São Tomé and Príncipe",
+        "flagUrl": "{staticUrl}/countries/ST.png"
+    },
+    {
+        "name": "Suriname",
+        "flagUrl": "{staticUrl}/countries/SR.png"
+    },
+    {
+        "name": "Slovakia",
+        "flagUrl": "{staticUrl}/countries/SK.png"
+    },
+    {
+        "name": "Slovenia",
+        "flagUrl": "{staticUrl}/countries/SI.png"
+    },
+    {
+        "name": "Sweden",
+        "flagUrl": "{staticUrl}/countries/SE.png"
+    },
+    {
+        "name": "Swaziland",
+        "flagUrl": "{staticUrl}/countries/SZ.png"
+    },
+    {
+        "name": "Seychelles",
+        "flagUrl": "{staticUrl}/countries/SC.png"
+    },
+    {
+        "name": "Syria",
+        "flagUrl": "{staticUrl}/countries/SY.png"
+    },
+    {
+        "name": "Turks and Caicos Islands",
+        "flagUrl": "{staticUrl}/countries/TC.png"
+    },
+    {
+        "name": "Chad",
+        "flagUrl": "{staticUrl}/countries/TD.png"
+    },
+    {
+        "name": "Togo",
+        "flagUrl": "{staticUrl}/countries/TG.png"
+    },
+    {
+        "name": "Thailand",
+        "flagUrl": "{staticUrl}/countries/TH.png"
+    },
+    {
+        "name": "Tajikistan",
+        "flagUrl": "{staticUrl}/countries/TJ.png"
+    },
+    {
+        "name": "Tokelau",
+        "flagUrl": "{staticUrl}/countries/TK.png"
+    },
+    {
+        "name": "Turkmenistan",
+        "flagUrl": "{staticUrl}/countries/TM.png"
+    },
+    {
+        "name": "Timor-Leste",
+        "flagUrl": "{staticUrl}/countries/TL.png"
+    },
+    {
+        "name": "Tonga",
+        "flagUrl": "{staticUrl}/countries/TO.png"
+    },
+    {
+        "name": "Trinidad and Tobago",
+        "flagUrl": "{staticUrl}/countries/TT.png"
+    },
+    {
+        "name": "Tunisia",
+        "flagUrl": "{staticUrl}/countries/TN.png"
+    },
+    {
+        "name": "Turkey",
+        "flagUrl": "{staticUrl}/countries/TR.png"
+    },
+    {
+        "name": "Tuvalu",
+        "flagUrl": "{staticUrl}/countries/TV.png"
+    },
+    {
+        "name": "Taiwan",
+        "flagUrl": "{staticUrl}/countries/TW.png"
+    },
+    {
+        "name": "Tanzania",
+        "flagUrl": "{staticUrl}/countries/TZ.png"
+    },
+    {
+        "name": "Uganda",
+        "flagUrl": "{staticUrl}/countries/UG.png"
+    },
+    {
+        "name": "Ukraine",
+        "flagUrl": "{staticUrl}/countries/UA.png"
+    },
+    {
+        "name": "Uruguay",
+        "flagUrl": "{staticUrl}/countries/UY.png"
+    },
+    {
+        "name": "United States",
+        "flagUrl": "{staticUrl}/countries/US.png"
+    },
+    {
+        "name": "Uzbekistan",
+        "flagUrl": "{staticUrl}/countries/UZ.png"
+    },
+    {
+        "name": "Vatican City",
+        "flagUrl": "{staticUrl}/countries/VA.png"
+    },
+    {
+        "name": "Saint Vincent and the Grenadines",
+        "flagUrl": "{staticUrl}/countries/VC.png"
+    },
+    {
+        "name": "Venezuela",
+        "flagUrl": "{staticUrl}/countries/VE.png"
+    },
+    {
+        "name": "British Virgin Islands",
+        "flagUrl": "{staticUrl}/countries/VG.png"
+    },
+    {
+        "name": "United States Virgin Islands",
+        "flagUrl": "{staticUrl}/countries/VI.png"
+    },
+    {
+        "name": "Vietnam",
+        "flagUrl": "{staticUrl}/countries/VN.png"
+    },
+    {
+        "name": "Vanuatu",
+        "flagUrl": "{staticUrl}/countries/VU.png"
+    },
+    {
+        "name": "Wallis and Futuna",
+        "flagUrl": "{staticUrl}/countries/WF.png"
+    },
+    {
+        "name": "Samoa",
+        "flagUrl": "{staticUrl}/countries/WS.png"
+    },
+    {
+        "name": "Yemen",
+        "flagUrl": "{staticUrl}/countries/YE.png"
+    },
+    {
+        "name": "South Africa",
+        "flagUrl": "{staticUrl}/countries/ZA.png"
+    },
+    {
+        "name": "Zambia",
+        "flagUrl": "{staticUrl}/countries/ZM.png"
+    },
+    {
+        "name": "Zimbabwe",
+        "flagUrl": "{staticUrl}/countries/ZW.png"
+    }
+]

@@ -9,7 +9,7 @@ export default Country;
 
 const schema = new mongoose.Schema(
     {
-        name: {type: String, required: true},
+        name: {type: String, required: true, index: true},
         flagUrl: {type: String, required: true}
     },
     {

@@ -1,4 +1,5 @@
 import fs = require('fs');
+import path = require('path');
 import mkdirp = require('mkdirp');
 import debug = require('debug');
 import events = require('events');
@@ -13,6 +14,7 @@ import TeamService from './models/team-service';
 import DotaService from './models/dota-service';
 import UserService from './models/user-service';
 import UserCommander from './models/user-commander';
+import CountryService from './models/country-service';
 import Translator from './utils/translator';
 import {addTranslations} from './utils/translator-utils';
 
@@ -21,7 +23,7 @@ const log = debug('dfw:CommonModule');
 export default class CommonModule implements Module {
     preBootstrap(di: Bottle) {
         di.constant('staticDirPath', process.env.DFWB_STATIC_DIR_PATH);
-        di.constant('staticDirUrl', process.env.DFWB_STATIC_DIR_URL);
+        di.constant('staticUrl', process.env.DFWB_STATIC_URL);
         di.constant('facebookAppId', process.env.DFWB_FACEBOOK_APP_ID);
         di.constant('facebookAppSecret', process.env.DFWB_FACEBOOK_APP_SECRET);
         di.constant('googleAppId', process.env.DFWB_GOOGLE_APP_ID);
@@ -42,21 +44,16 @@ export default class CommonModule implements Module {
         di.service('teamCommander', <any> TeamCommander, 'teamService');
         di.service('userService', <any> UserService);
         di.service('userCommander', <any> UserCommander, 'userService',
-            'staticDirPath', 'staticDirUrl');
+            'staticDirPath', 'staticUrl');
+        di.service('countryService', <any> CountryService);
     }
 
     bootstrap(diContainer: Bottle.IContainer) {
         return new Promise(function(resolve, reject) {
-            const staticDirPath: string = (<any> diContainer).staticDirPath;
-
-            try {
-                fs.statSync(staticDirPath);
-            } catch (error) {
-                mkdirp.sync(staticDirPath);
-            }
-
             const translator: Translator = (<any> diContainer).translator;
-            addTranslations(translator, `${__dirname}/translations`);
+            const req =
+                (<any> require).context('./translations', false, /\.json$/);
+            addTranslations(translator, req);
 
             mongoose.Promise = <any> Promise;
             mongoose.connect(process.env.DFWB_DB_URL, (error: any) => {

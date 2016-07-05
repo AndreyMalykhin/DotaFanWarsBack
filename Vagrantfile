@@ -2,6 +2,7 @@
 # vi: set ft=ruby :
 
 projectDir = "/dotafanwars_back"
+staticProjectDir = "/dotafanwars_static"
 provisionFile = "bootstrap.sh"
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
@@ -39,7 +40,9 @@ Vagrant.configure(2) do |config|
     override.vm.box = "ubuntu/trusty64"
     override.vm.hostname = ENV['DFWB_HOST']
     override.vm.synced_folder ".", projectDir, :nfs => true
+    override.vm.synced_folder "../dotafanwars_static", staticProjectDir, :nfs => true
     override.bindfs.bind_folder projectDir, projectDir
+    override.bindfs.bind_folder staticProjectDir, staticProjectDir
 
     # Create a forwarded port mapping which allows access to a specific port
     # within the machine from a port on the host machine. In the example below,
