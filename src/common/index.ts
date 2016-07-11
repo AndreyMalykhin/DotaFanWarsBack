@@ -15,6 +15,7 @@ import DotaService from './models/dota-service';
 import UserService from './models/user-service';
 import UserCommander from './models/user-commander';
 import CountryService from './models/country-service';
+import RoomService from './models/room-service';
 import Translator from './utils/translator';
 import {addTranslations} from './utils/translator-utils';
 
@@ -40,12 +41,13 @@ export default class CommonModule implements Module {
         di.service('matchService', <any> MatchService);
         di.service('teamService', <any> TeamService);
         di.service('matchCommander', <any> MatchCommander, 'matchService',
-            'eventBus');
+            'roomService', 'eventBus');
         di.service('teamCommander', <any> TeamCommander, 'teamService');
         di.service('userService', <any> UserService);
         di.service('userCommander', <any> UserCommander, 'userService',
             'staticDirPath', 'staticUrl');
         di.service('countryService', <any> CountryService);
+        di.service('roomService', <any> RoomService);
     }
 
     bootstrap(diContainer: Bottle.IContainer) {

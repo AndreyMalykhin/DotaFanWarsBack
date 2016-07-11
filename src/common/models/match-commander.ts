@@ -1,15 +1,19 @@
 import debug = require('debug');
 import events = require('events');
-import {MATCH_START, MATCH_UPDATE, MATCH_END} from '../utils/event-type';
-import {MatchStartEvent, MatchUpdateEvent, MatchEndEvent} from
+import {ROOM_ADD, MATCH_UPDATE, MATCH_END} from '../utils/event-type';
+import {RoomAddEvent, MatchUpdateEvent, MatchEndEvent} from
     '../utils/events';
 import Match from './match';
 import MatchService from './match-service';
+import {RoomType} from './room';
+import RoomService from './room-service';
 
 const log = debug('dfw:MatchCommander');
 
 export default class MatchCommander {
-    constructor(private matchService: MatchService,
+    constructor(
+        private matchService: MatchService,
+        private roomService: RoomService,
         private eventBus: events.EventEmitter) {}
 
     endAll(matches: Match[]) {
@@ -34,12 +38,24 @@ export default class MatchCommander {
 
     startAll(matches: Match[]) {
         log('startAll(); matches=%o', matches);
-        return this.matchService.saveAll(matches).then((matches) => {
-            this.eventBus.emit(
-                MATCH_START,
-                <MatchStartEvent> {matchIds: this.getMatchIds(matches)}
-            );
-        });
+        return this.matchService.saveAll(matches)
+            .then((matches) => {
+                const rooms = matches.map((match) => {
+                    return new RoomType({name: 'Room 1', match});
+                });
+                return this.roomService.saveAll(rooms);
+            })
+            .then((rooms) => {
+                const roomIds = rooms.map((room) => <string> room.id);
+                this.eventBus.emit(
+                    ROOM_ADD,
+                    <RoomAddEvent> {roomIds: roomIds}
+                );
+            });
+    }
+
+    updateRoom(id: string, fields: Object) {
+        return this.roomService.update({_id: id}, fields);
     }
 
     private getMatchIds(matches: Match[]) {

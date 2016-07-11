@@ -1,28 +1,27 @@
 import Bottle = require('bottlejs');
 import express = require('express');
+import HttpStatus = require('http-status-codes');
+import RoomService from '../../common/models/room-service';
+import ApiResponse from '../../common/utils/api-response';
 
 export default function factory(diContainer: Bottle.IContainer) {
     const controller = express.Router();
-    controller.get('/:matchId/rooms', function(req, res) {
-        setTimeout(function() {
-            res.json({
-                status: 200,
-                data: [
-                    {
-                        id: '1',
-                        name: 'room 1',
-                        gameServerUrl: req.protocol + '://' + req.get('Host') + '/game',
-                        chatServerUrl: req.protocol + '://' + req.get('Host') + '/chat'
-                    },
-                    {
-                        id: '2',
-                        name: 'room 2',
-                        gameServerUrl: req.protocol + '://' + req.get('Host') + '/game',
-                        chatServerUrl: req.protocol + '://' + req.get('Host') + '/chat'
-                    }
-                ]
+    const roomService: RoomService = (<any> diContainer).roomService;
+    controller.get('/:id/rooms', (req, res, next) => {
+        roomService.getAll({
+            matchId: req.params.id,
+            matchServerUrl: {$ne: null}}
+        )
+        .exec()
+        .then((rooms) => {
+            res.json(<ApiResponse> {
+                status: HttpStatus.OK,
+                data: rooms.map((room) => {
+                    const {id, name, matchServerUrl, chatServerUrl} = room;
+                    return {id, name, matchServerUrl, chatServerUrl};
+                })
             });
-        }, 1000);
+        }, next);
     });
     return controller;
 }

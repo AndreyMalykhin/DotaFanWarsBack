@@ -29,9 +29,7 @@ export default function factory(diContainer: Bottle.IContainer) {
                     return;
                 }
 
-                req.login(user, {session: false}, (error) => {
-                    return next(error || null);
-                });
+                req.login(user, {session: false}, next);
             }
         );
         authenticator(req, res, next);

@@ -1,5 +1,5 @@
-export interface MatchStartEvent {
-    matchIds: string[];
+export interface RoomAddEvent {
+    roomIds: string[];
 }
 
 export interface MatchUpdateEvent {

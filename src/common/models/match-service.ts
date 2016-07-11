@@ -21,12 +21,9 @@ export default class MatchService {
 
     saveAll(matches: Match[]) {
         log('saveAll(); matches=%o', matches);
-        const promises: Promise<Match>[] = [];
-
-        for (let match of matches) {
-            promises.push(<any> match.save());
-        }
-
+        const promises = matches.map((match) => {
+            return match.save();
+        });
         return <Promise<Match[]>> <any> Promise.all(promises);
     }
 }
