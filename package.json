@@ -5,7 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=production DFWB_DEV=0 node build/bundle.js",
     "build": "NODE_ENV=production DFWB_DEV=0 webpack --config webpack-config.js --progress",
-    "start-dev": "NODE_ENV=development DFWB_DEV=1 DEBUG=* nodemon --watch build build/bundle.js",
+    "start-dev": "NODE_ENV=development DFWB_DEV=1 DEBUG=*,-engine:*,-socket.io:*,-socket.io-parser nodemon --watch build build/bundle.js",
     "build-dev": "NODE_ENV=development DFWB_DEV=1 webpack --config webpack-config.js --watch --progress -d",
     "init-dev": "typings init",
     "typings": "typings"

@@ -16,6 +16,7 @@ import UserService from './models/user-service';
 import UserCommander from './models/user-commander';
 import CountryService from './models/country-service';
 import RoomService from './models/room-service';
+import ItemService from './models/item-service';
 import Translator from './utils/translator';
 import {addTranslations} from './utils/translator-utils';
 
@@ -23,6 +24,7 @@ const log = debug('dfw:CommonModule');
 
 export default class CommonModule implements Module {
     preBootstrap(di: Bottle) {
+        di.constant('host', process.env.DFWB_HOST);
         di.constant('staticDirPath', process.env.DFWB_STATIC_DIR_PATH);
         di.constant('staticUrl', process.env.DFWB_STATIC_URL);
         di.constant('facebookAppId', process.env.DFWB_FACEBOOK_APP_ID);
@@ -48,6 +50,7 @@ export default class CommonModule implements Module {
             'staticDirPath', 'staticUrl');
         di.service('countryService', <any> CountryService);
         di.service('roomService', <any> RoomService);
+        di.service('itemService', <any> ItemService);
     }
 
     bootstrap(diContainer: Bottle.IContainer) {

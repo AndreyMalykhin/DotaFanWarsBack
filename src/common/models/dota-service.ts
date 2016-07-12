@@ -67,12 +67,9 @@ export default class DotaService {
     ): Promise<any> {
         query = `?key=${this.apiKey}${query ? `&${query}` : ''}`;
         const url = `${this.apiUrl}/${resource}/${method}/v1/${query}`;
+        log('fetch(); url=%o', url);
         return fetch(url, options)
             .then((response) => response.text())
-            .then((response) => {
-                response = JSON.parse(response);
-                log('fetch(); url=%o; response=%o', url, response);
-                return response;
-            });
+            .then((response) => JSON.parse(response));
     }
 }

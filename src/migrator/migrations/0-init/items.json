@@ -1,0 +1,14 @@
+[
+    {
+        "name": "items.beer",
+        "behavior": 1,
+        "price": 1,
+        "photoUrl": "{staticUrl}/items/beer.svg"
+    },
+    {
+        "name": "items.chicken-leg",
+        "behavior": 0,
+        "price": 1,
+        "photoUrl": "{staticUrl}/items/chicken-leg.svg"
+    }
+]

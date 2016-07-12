@@ -4,8 +4,24 @@ import MatchServer from './models/match-server';
 
 export default class MatchServerModule implements Module {
     preBootstrap(di: Bottle) {
-        di.service('matchServer', <any> MatchServer, 'socketIO', 'eventBus',
-            'matchCommander');
+        di.service(
+            'matchServer',
+            <any> MatchServer,
+            'host',
+            'port',
+            'socketIO',
+            'eventBus',
+            'matchCommander',
+            'secretKey',
+            'userService',
+            'roomService',
+            'matchService',
+            'itemService',
+            'countryService',
+            'userCommander',
+            'teamCommander',
+            'translator'
+        );
     }
 
     bootstrap(diContainer: Bottle.IContainer) {

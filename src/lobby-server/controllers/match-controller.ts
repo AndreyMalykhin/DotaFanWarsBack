@@ -9,7 +9,7 @@ export default function factory(diContainer: Bottle.IContainer) {
     const roomService: RoomService = (<any> diContainer).roomService;
     controller.get('/:id/rooms', (req, res, next) => {
         roomService.getAll({
-            matchId: req.params.id,
+            match: req.params.id,
             matchServerUrl: {$ne: null}}
         )
         .exec()

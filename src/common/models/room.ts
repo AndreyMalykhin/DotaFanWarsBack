@@ -17,7 +17,10 @@ const schema = new mongoose.Schema(
     {
         name: {type: String, required: true},
         match: {
-            type: mongoose.Schema.Types.ObjectId, ref: 'Match', required: true
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Match',
+            required: true,
+            index: true
         },
         matchServerUrl: {type: String},
         chatServerUrl: {type: String}

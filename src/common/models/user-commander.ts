@@ -17,7 +17,7 @@ export default class UserCommander {
     ) {}
 
     add(profile: passport.Profile) {
-        log('add(); profile=%o', profile);
+        log('add()');
         const user = new UserType();
         user.nickname = profile.displayName;
         user.email = profile.emails[0].value;
@@ -37,12 +37,17 @@ export default class UserCommander {
     }
 
     update(user: User) {
-        log('update(); user=%o', user);
+        log('update(); id=%o', user.id);
         return this.userService.save(user);
     }
 
+    updateById(id: string, data: Object) {
+        log('updateById(); id=%o', id);
+        return this.userService.updateById(id, data);
+    }
+
     setPhoto(user: User, file: Buffer, fileName: string): Promise<User> {
-        log('setPhoto(); user=%o; fileName=%o', user, fileName);
+        log('setPhoto(); fileName=%o', fileName);
         const newFileName = `${uuid.v4()}${path.extname(fileName)}`;
         const dirName = 'user-photos';
         const outputFilePath = path.join(this.staticDirPath, dirName, newFileName);
@@ -51,5 +56,12 @@ export default class UserCommander {
                 user.photoUrl = `${this.staticUrl}/${dirName}/${newFileName}`;
                 return this.userService.save(user);
             });
+    }
+
+    punishForLeave(id: string) {
+        log('punishForLeave(); id=%o', id);
+        const banDuration = 60 * 4 * 1000;
+        return this.userService.updateById(
+            id, {unbanDate: new Date(Date.now() + banDuration)});
     }
 }

@@ -5,20 +5,17 @@ const log = debug('dfw:RoomService');
 
 export default class RoomService {
     getAll(query = {}) {
-        log('getAll(); query=%o', query);
         return RoomType.find(query);
     }
 
     saveAll(rooms: Room[]) {
-        log('saveAll(); rooms=%o', rooms);
-        const promises = rooms.map((room) => {
-            return room.save();
-        });
+        log('saveAll()');
+        const promises = rooms.map((room) => room.save());
         return <Promise<Room[]>> <any> Promise.all(promises);
     }
 
-    update(query: Object, fields: Object) {
-        return <Promise<Room>> <any> RoomType.findOneAndUpdate(
-            query, fields).exec();
+    removeAll(query: Object) {
+        log('removeAll(); query=%o', query);
+        return RoomType.remove(query).exec();
     }
 }

@@ -50,13 +50,13 @@ export default class DotaTeamMonitor {
     }
 
     private preProcessTeams(games: GetLiveLeagueGamesResponse.Game[]) {
-        log('preProcessTeams(); games=%o', games);
+        log('preProcessTeams()');
         games = filterInterestingGames(games);
         const dotaTeams: GetLiveLeagueGamesResponse.Team[] = [];
         const dotaTeamIds: string[] = [];
         const teamLogoIds: string[] = [];
 
-        for (let {radiant_team, dire_team} of games) {
+        games.forEach(({radiant_team, dire_team}) => {
             dotaTeams.push(radiant_team, dire_team);
             dotaTeamIds.push(radiant_team.team_id, dire_team.team_id);
             const team1LogoId = radiant_team.team_logo;
@@ -69,7 +69,7 @@ export default class DotaTeamMonitor {
             if (team2LogoId) {
                 teamLogoIds.push(team2LogoId);
             }
-        }
+        });
 
         return Promise.all([
             dotaTeams,
@@ -83,13 +83,12 @@ export default class DotaTeamMonitor {
         currentTeams: Team[],
         teamLogos: TeamLogo[]
     ) {
-        log('processTeams(); dotaTeams=%o; currentTeams=%o; teamLogos=%o',
-            dotaTeams, currentTeams, teamLogos);
+        log('processTeams()');
         const teamLogoMap = _.keyBy(teamLogos, (logo) => logo && logo.id);
         const currentTeamMap = _.keyBy(currentTeams, 'dotaId');
         const nextTeams: Team[] = [];
 
-        for (let dotaTeam of dotaTeams) {
+        dotaTeams.forEach((dotaTeam) => {
             const dotaTeamId = dotaTeam.team_id;
             let team = currentTeamMap[dotaTeamId];
 
@@ -101,17 +100,15 @@ export default class DotaTeamMonitor {
             const logoId = dotaTeam.team_logo;
             team.logoUrl = logoId ? teamLogoMap[logoId].url : null;
             nextTeams.push(team);
-        }
+        });
 
         return this.teamCommander.saveAll(nextTeams);
     }
 
     private getTeamLogos(logoIds: string[]) {
         log('getTeamLogos(); logoIds=%o', logoIds);
-        const promises: Promise<TeamLogo>[] = [];
-
-        for (let logoId of logoIds) {
-            const promise = this.dotaService.getUGCFileDetails(logoId)
+        const promises = logoIds.map((logoId) => {
+            return this.dotaService.getUGCFileDetails(logoId)
                 .then((response) => {
                     const {status, data} = response;
 
@@ -121,8 +118,7 @@ export default class DotaTeamMonitor {
 
                     return {id: logoId, url: data.url};
                 });
-            promises.push(promise);
-        }
+        });
 
         return <Promise<TeamLogo[]>> <any> Promise.all(promises);
     }

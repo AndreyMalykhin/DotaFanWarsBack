@@ -14,7 +14,7 @@ const log = debug('dfw:DotaMatchMonitor');
 
 export default class DotaMatchMonitor {
     // TODO
-    private tickRate = 64000;
+    private tickRate = 32000;
 
     constructor(
         private dotaService: DotaService,
@@ -41,9 +41,7 @@ export default class DotaMatchMonitor {
     private tick() {
         log('tick()');
         return this.dotaService.getLiveLeagueGames()
-            .then((response) => {
-                return this.preProcessMatches(response);
-            })
+            .then((response) => this.preProcessMatches(response))
             .then(([dotaMatches, matches, teams]) => {
                 return this.processMatches(dotaMatches, matches, teams);
             }, (error) => {
@@ -53,13 +51,13 @@ export default class DotaMatchMonitor {
     }
 
     private preProcessMatches(response: GetLiveLeagueGamesResponse) {
-        log('preProcessMatches(); response=%o', response);
+        log('preProcessMatches()');
         const dotaMatches = filterInterestingGames(response.result.games);
         const playingTeamIds: string[] = [];
 
-        for (let {radiant_team, dire_team} of dotaMatches) {
+        dotaMatches.forEach(({radiant_team, dire_team}) => {
             playingTeamIds.push(radiant_team.team_id, dire_team.team_id);
-        }
+        });
 
         return Promise.all([
             dotaMatches,
@@ -73,8 +71,8 @@ export default class DotaMatchMonitor {
         matches: Match[],
         teams: Team[]
     ) {
-        log('processMatches(); dotaMatches=%o; matches=%o; teams=%o',
-            dotaMatches, matches, teams);
+        log('processMatches(); count=%o; dotaCount=%o',
+            matches.length, dotaMatches.length);
         const dotaMatchMap = _.keyBy(dotaMatches, 'match_id');
         const matchMap = _.keyBy(matches, 'dotaId');
         const teamMap = _.keyBy(teams, 'dotaId');
@@ -82,15 +80,14 @@ export default class DotaMatchMonitor {
         const matchesToEnd: Match[] = [];
         const matchesToStart: Match[] = [];
 
-        for (let dotaMatchId in matchMap) {
+        _.forEach(matchMap, (match, dotaMatchId) => {
             if (!dotaMatchMap[dotaMatchId]) {
                 matchesToEnd.push(matchMap[dotaMatchId]);
             }
-        }
+        });
 
-        for (let dotaMatchId in dotaMatchMap) {
-            const {scoreboard, radiant_team, dire_team} =
-                dotaMatchMap[dotaMatchId];
+        _.forEach(dotaMatchMap, (dotaMatch, dotaMatchId) => {
+            const {scoreboard, radiant_team, dire_team} = dotaMatch;
             let match = matchMap[dotaMatchId];
             let radiantScore = 0;
             let direScore = 0;
@@ -102,17 +99,20 @@ export default class DotaMatchMonitor {
 
             if (match) {
                 const {radiant, dire} = match;
+
+                if (radiant.score == radiantScore && dire.score == direScore) {
+                    return;
+                }
+
                 radiant.score = radiantScore;
                 dire.score = direScore;
-                match.markModified('radiant.score');
-                match.markModified('dire.score');
                 matchesToUpdate.push(match);
             } else {
                 const radiantTeam = teamMap[radiant_team.team_id];
                 const direTeam = teamMap[dire_team.team_id];
 
                 if (!radiantTeam || !direTeam) {
-                    continue;
+                    return;
                 }
 
                 match = new MatchType();
@@ -122,7 +122,7 @@ export default class DotaMatchMonitor {
                 match.dire = {team: direTeam, score: direScore};
                 matchesToStart.push(match);
             }
-        }
+        });
 
         const matchCommander = this.matchCommander;
         return Promise.all([

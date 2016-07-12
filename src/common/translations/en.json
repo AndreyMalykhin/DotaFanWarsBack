@@ -3,5 +3,9 @@
         "required": "Required",
         "length": "Too long",
         "fileSize": "Max allowed file size is %{size} MB"
+    },
+    "items": {
+        "beer": "Beer",
+        "chicken-leg": "Chicken"
     }
 }

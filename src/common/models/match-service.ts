@@ -5,7 +5,6 @@ const log = debug('dfw:MatchService');
 
 export default class MatchService {
     getAll(query = {}) {
-        log('getAll(); query=%o', query);
         return MatchType.find(query);
     }
 
@@ -14,16 +13,14 @@ export default class MatchService {
     }
 
     removeAll(matches: Match[]) {
-        log('removeAll(); matches=%o', matches);
+        log('removeAll()');
         const ids = matches.map((match) => match.id);
-        return MatchType.remove({_id: {$in: ids}});
+        return MatchType.remove({_id: {$in: ids}}).exec();
     }
 
     saveAll(matches: Match[]) {
-        log('saveAll(); matches=%o', matches);
-        const promises = matches.map((match) => {
-            return match.save();
-        });
+        log('saveAll()');
+        const promises = matches.map((match) => match.save());
         return <Promise<Match[]>> <any> Promise.all(promises);
     }
 }
