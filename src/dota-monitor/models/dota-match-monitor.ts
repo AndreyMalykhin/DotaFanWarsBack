@@ -13,8 +13,9 @@ import {filterInterestingGames} from
 const log = debug('dfw:DotaMatchMonitor');
 
 export default class DotaMatchMonitor {
-    // TODO
-    private tickRate = 32000;
+    private tickRate = 8000;
+    private endMatchDelay = 32 * 1000;
+    private matchEndDates: {[dotaMatchId: string]: number} = {};
 
     constructor(
         private dotaService: DotaService,
@@ -77,14 +78,9 @@ export default class DotaMatchMonitor {
         const matchMap = _.keyBy(matches, 'dotaId');
         const teamMap = _.keyBy(teams, 'dotaId');
         const matchesToUpdate: Match[] = [];
-        const matchesToEnd: Match[] = [];
         const matchesToStart: Match[] = [];
-
-        _.forEach(matchMap, (match, dotaMatchId) => {
-            if (!dotaMatchMap[dotaMatchId]) {
-                matchesToEnd.push(matchMap[dotaMatchId]);
-            }
-        });
+        const {matchCommander, matchEndDates, endMatchDelay} = this;
+        const currentDate = Date.now();
 
         _.forEach(dotaMatchMap, (dotaMatch, dotaMatchId) => {
             const {scoreboard, radiant_team, dire_team} = dotaMatch;
@@ -98,6 +94,7 @@ export default class DotaMatchMonitor {
             }
 
             if (match) {
+                delete matchEndDates[dotaMatchId];
                 const {radiant, dire} = match;
 
                 if (radiant.score == radiantScore && dire.score == direScore) {
@@ -124,7 +121,21 @@ export default class DotaMatchMonitor {
             }
         });
 
-        const matchCommander = this.matchCommander;
+        _.forEach(matchMap, (match, dotaMatchId) => {
+            if (!dotaMatchMap[dotaMatchId] && !matchEndDates[dotaMatchId]) {
+                matchEndDates[dotaMatchId] = currentDate + endMatchDelay;
+            }
+        });
+
+        const matchesToEnd: Match[] = [];
+
+        _.forEach(matchEndDates, (endDate, dotaMatchId) => {
+            if (currentDate >= endDate) {
+                matchesToEnd.push(matchMap[dotaMatchId]);
+                delete matchEndDates[dotaMatchId];
+            }
+        });
+
         return Promise.all([
             matchCommander.startAll(matchesToStart),
             matchCommander.updateAll(matchesToUpdate),

@@ -10,7 +10,6 @@ import Team, {TeamType} from '../../common/models/team';
 const log = debug('dfw:DotaTeamMonitor');
 
 export default class DotaTeamMonitor {
-    // TODO
     private tickRate = 64000;
 
     constructor(

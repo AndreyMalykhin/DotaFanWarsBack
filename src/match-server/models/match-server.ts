@@ -38,10 +38,12 @@ export default class MatchServer {
     private countries: Country[] = [];
     private items: {[id: string]: Item} = {};
     private projectileLifetime = 1000;
-    private defensiveItemPower = 7;
+    // TODO
+    private defensiveItemPower = 16;
     private offensiveItemPower = this.defensiveItemPower;
-    private victoryRatingDelta = 7;
+    private victoryRatingDelta = 16;
     private defeatRatingDelta = this.victoryRatingDelta;
+    private characterMaxHealth = 100;
 
     constructor(
         host: string,
@@ -139,18 +141,20 @@ export default class MatchServer {
         const items = _.mapValues(this.items, (item) => {
             return {id: <string> item.id, count: 0};
         });
+        const characterId = uuid.v4();
         this.clientSessions[socketId] = {
             roomId,
             user,
             character: {
-                id: uuid.v4(),
+                id: characterId,
                 teamId,
                 seatId: null,
-                health: 100,
+                health: this.characterMaxHealth,
                 money: 0,
                 items
             }
         };
+        this.roomSessions[roomId].characterClients[characterId] = socketId;
     }
 
     private onRoomAdd(event: RoomAddEvent) {
@@ -159,7 +163,6 @@ export default class MatchServer {
         this.takeRooms(roomIds);
     }
 
-    // TODO
     private onMatchUpdate(event: MatchUpdateEvent) {
         const {matchIds} = event;
         log('onMatchUpdate(); ids=%o', matchIds);
@@ -208,36 +211,41 @@ export default class MatchServer {
                     ]
                 };
 
-                _.forEach(this.matchRooms[newMatch.id], (roomIds: string[]) => {
-                    roomIds.forEach((roomId) => {
-                        _.forEach(
-                            this.getRoomSockets(roomId),
-                            (dummy, socketId) => {
-                                const character =
-                                    this.clientSessions[socketId].character;
-                                const teamScoreDiff = newTeamScores[character.teamId] - oldTeamScores[character.teamId];
-                                const messages: Msg[] = [updateTeamsMsg];
+                _.forEach(this.matchRooms[newMatch.id], (roomId) => {
+                    _.forEach(
+                        this.getRoomClients(roomId),
+                        (dummy, socketId) => {
+                            const character =
+                                this.clientSessions[socketId].character;
+                            const {seatId: characterSeatId, id: characterId, teamId: characterTeamId, health: characterHealth} = character;
+                            const teamScoreDiff =
+                                newTeamScores[characterTeamId] -
+                                oldTeamScores[characterTeamId];
+                            const messages: Msg[] = [updateTeamsMsg];
 
-                                if (character.seatId && teamScoreDiff > 0) {
-                                    character.money += teamScoreDiff;
-                                    const updateCharactersMsg = <UpdateCharactersMsg> {
+                            if (characterSeatId
+                                && characterHealth > 0
+                                && teamScoreDiff > 0
+                            ) {
+                                character.money += teamScoreDiff;
+                                const updateCharactersMsg =
+                                    <UpdateCharactersMsg> {
                                         type: 'updateCharacters',
                                         data: [
                                             {
-                                                id: character.id,
+                                                id: characterId,
                                                 money: character.money
                                             }
                                         ]
                                     };
-                                    messages.push(updateCharactersMsg);
-                                }
-
-                                const socket =
-                                    this.socketIONamespace.connected[socketId];
-                                this.send(socket, messages);
+                                messages.push(updateCharactersMsg);
                             }
-                        );
-                    });
+
+                            const socket =
+                            this.socketIONamespace.connected[socketId];
+                            this.send(socket, messages);
+                        }
+                    );
                 });
             });
         });
@@ -255,53 +263,56 @@ export default class MatchServer {
         const saveUserPromises: Promise<any>[] = [];
 
         matchIds.forEach((matchId) => {
-            _.forEach(this.matchRooms[matchId], (roomIds: string[]) => {
-                roomIds.forEach((roomId) => {
-                    let winnerId: string = null;
-                    const match = this.matches[matchId];
-                    const radiantTeamId =
-                        <string> (<Team> match.radiant.team).id;
-                    const direTeamId = <string> (<Team> match.dire.team).id;
-                    const teams = this.roomSessions[roomId].teams;
-                    const radiantScore = teams[radiantTeamId].score;
-                    const direScore = teams[direTeamId].score;
+            _.forEach(this.matchRooms[matchId], (roomId) => {
+                let winnerId: string = null;
+                const match = this.matches[matchId];
+                const radiantTeamId =
+                    <string> (<Team> match.radiant.team).id;
+                const direTeamId = <string> (<Team> match.dire.team).id;
+                const teams = this.roomSessions[roomId].teams;
+                const radiantScore = teams[radiantTeamId].score;
+                const direScore = teams[direTeamId].score;
 
-                    if (radiantScore > direScore) {
-                        winnerId = radiantTeamId;
-                    } else if (direScore > radiantScore) {
-                        winnerId = direTeamId;
-                    }
+                if (radiantScore > direScore) {
+                    winnerId = radiantTeamId;
+                } else if (direScore > radiantScore) {
+                    winnerId = direTeamId;
+                }
 
+                if (winnerId) {
                     [radiantTeamId, direTeamId].forEach((teamId) => {
                         const teamRatingDelta = teamId == winnerId ?
-                            this.victoryRatingDelta : this.defeatRatingDelta;
+                            this.victoryRatingDelta : -this.defeatRatingDelta;
                         const promise = this.teamCommander.updateById(
                             teamId, {$inc: {rating: teamRatingDelta}});
                         saveTeamPromises.push(promise);
                     });
+                }
 
-                    _.forEach(
-                        this.getRoomSockets(roomId),
-                        (dummy, socketId) => {
-                            const {character, user} =
-                                this.clientSessions[socketId];
-                            const userRatingDelta =
+                _.forEach(
+                    this.getRoomClients(roomId),
+                    (dummy, socketId) => {
+                        const {character, user} = this.clientSessions[socketId];
+                        let userRatingDelta: number = 0;
+
+                        if (winnerId) {
+                            userRatingDelta =
                                 character.teamId == winnerId ?
                                 this.victoryRatingDelta :
-                                this.defeatRatingDelta;
+                                -this.defeatRatingDelta;
                             const promise = this.userCommander.updateById(
                                 <string> user.id,
                                 {$inc: {rating: userRatingDelta}}
                             );
                             saveUserPromises.push(promise);
-                            infoForClients.push(
-                                {socketId, winnerId, userRatingDelta});
-                            delete this.clientSessions[socketId];
                         }
-                    );
 
-                    delete this.roomSessions[roomId];
-                });
+                        infoForClients.push(
+                            {socketId, winnerId, userRatingDelta});
+                    }
+                );
+
+                delete this.roomSessions[roomId];
             });
 
             delete this.matches[matchId];
@@ -341,7 +352,7 @@ export default class MatchServer {
         const updateSeatsMsg: UpdateSeatsMsg = {type: 'updateSeats', data: []};
         const updateItemsMsg: Msg = {type: 'updateItems', data: []};
 
-        _.forEach(this.getRoomSockets(roomId), (dummy, roomSocketId) => {
+        _.forEach(this.getRoomClients(roomId), (dummy, roomSocketId) => {
             const includePrivateData = roomSocketId == socketId;
             const serializedCharacter = this.serializeCharacter(
                 this.clientSessions[roomSocketId], includePrivateData);
@@ -402,7 +413,7 @@ export default class MatchServer {
 
         if (isAlreadyTaken) {
             // TODO
-            log(`already taken; seat=%o`, seat);
+            log(`seat already taken`);
             responseSender([]);
             return;
         }
@@ -427,15 +438,22 @@ export default class MatchServer {
     private onBuyItem(
         socket: SocketIO.Socket, cmd: any, responseSender: ResponseSender) {
         log('onBuyItem(); cmd=%o', cmd);
-        const itemId = cmd.itemId;
-        const price = this.items[itemId].price;
         const character = this.clientSessions[socket.id].character;
-        const {id: characterId, money: characterMoney, items: characterItems} =
-            character;
+        const {id: characterId, money: characterMoney, items: characterItems, health: characterHealth} = character;
+
+        if (characterHealth <= 0) {
+            // TODO
+            log('character dead');
+            responseSender([]);
+            return;
+        }
+
+        const {itemId} = cmd;
+        const price = this.items[itemId].price;
 
         if (characterMoney < price) {
             // TODO
-            log('not enough money; money=%o; price=%o', characterMoney, price);
+            log('not enough money');
             responseSender([]);
             return;
         }
@@ -459,13 +477,21 @@ export default class MatchServer {
     private onUseItem(
         socket: SocketIO.Socket, cmd: any, responseSender: ResponseSender) {
         log('onUseItem(); cmd=%o', cmd);
-        const itemId = cmd.itemId;
         const {character, roomId} = this.clientSessions[socket.id];
-        const {items: characterItems, id: characterId} = character;
+        const {items: characterItems, id: characterId, health: characterHealth} = character;
+
+        if (characterHealth <= 0) {
+            // TODO
+            log('character dead');
+            responseSender([]);
+            return;
+        }
+
+        const {itemId} = cmd;
 
         if (!characterItems[itemId].count) {
             // TODO
-            log('no item; id=%o', itemId);
+            log('item out of stock');
             responseSender([]);
             return;
         }
@@ -488,8 +514,15 @@ export default class MatchServer {
         responseSender: ResponseSender
     ) {
         const {character, roomId} = this.clientSessions[socket.id];
-        character.health =
-            Math.min(character.health + this.defensiveItemPower, 100);
+
+        if (character.health >= this.characterMaxHealth) {
+            return responseSender([]);
+        }
+
+        character.health = Math.min(
+            character.health + this.defensiveItemPower,
+            this.characterMaxHealth
+        );
         const {health: characterHealth, items: characterItems, id: characterId}
             = character;
         const characterItemCount = --characterItems[itemId].count;
@@ -522,14 +555,23 @@ export default class MatchServer {
         responseSender: ResponseSender
     ) {
         const {character, roomId} = this.clientSessions[socket.id];
+        const roomSession = this.roomSessions[roomId];
+        const targetSocketId = roomSession.characterClients[targetId];
+        const target = this.clientSessions[targetSocketId].character;
+
+        if (target.health <= 0) {
+            responseSender([]);
+            return;
+        }
+
         const {items: characterItems, id: characterId} = character;
         const characterItemCount = --characterItems[itemId].count;
         const projectileId = uuid.v4();
-        const roomSession = this.roomSessions[roomId];
         roomSession.projectiles[projectileId] = {id: projectileId, targetId};
         setTimeout(() => {
-            this.hitProjectile(projectileId, character, roomSession);
+            this.hitProjectile(projectileId, target, roomSession);
         }, this.projectileLifetime);
+
         const updateProjectilesMsg: Msg = {
             type: 'updateProjectiles',
             data: [{id: projectileId, targetId}]
@@ -552,25 +594,25 @@ export default class MatchServer {
     }
 
     private hitProjectile(
-        projectileId: string, character: Character, roomSession: RoomSession) {
+        projectileId: string, target: Character, roomSession: RoomSession) {
         log('hitProjectile()');
         delete roomSession.projectiles[projectileId];
         const messages: Msg[] =
             [{type: 'removeProjectiles', data: [projectileId]}];
-        const {id: characterId, health: characterOldHealth, teamId: characterTeamId} = character;
+        const {health: targetOldHealth, teamId: targetTeamId} = target;
 
-        if (characterOldHealth > 0) {
-            character.health =
-                Math.max(characterOldHealth - this.offensiveItemPower, 0);
-            const characterNewHealth = character.health;
+        if (targetOldHealth > 0) {
+            target.health =
+                Math.max(targetOldHealth - this.offensiveItemPower, 0);
+            const targetNewHealth = target.health;
 
-            if (characterNewHealth <= 0) {
-                ++roomSession.teams[characterTeamId].score;
+            if (targetNewHealth <= 0) {
+                ++roomSession.teams[targetTeamId].score;
             }
 
             messages.push(<UpdateCharactersMsg> {
                 type: 'updateCharacters',
-                data: [{id: characterId, health: characterNewHealth}]
+                data: [{id: target.id, health: targetNewHealth}]
             });
         }
 
@@ -582,16 +624,20 @@ export default class MatchServer {
         log('onDisconnect()');
         const {character, roomId, user} = this.clientSessions[socket.id];
         delete this.clientSessions[socket.id];
-        const characterSeatId = character.seatId;
+        const roomSession = this.roomSessions[roomId];
+
+        if (!roomSession) {
+            return;
+        }
+
+        const {id: characterId, seatId: characterSeatId} = character;
+        delete roomSession.characterClients[characterId];
         const messages: Msg[] =
-            [{type: 'removeCharacters', data: [character.id]}];
+            [{type: 'removeCharacters', data: [characterId]}];
 
         if (characterSeatId) {
-            if (this.roomSessions[roomId]) {
-                this.userCommander.punishForLeave(<string> user.id);
-            }
-
-            this.roomSessions[roomId].seats[characterSeatId].characterId = null;
+            this.userCommander.punishForLeave(<string> user.id);
+            roomSession.seats[characterSeatId].characterId = null;
             messages.push(<UpdateSeatsMsg> {
                 type: 'updateSeats',
                 data: [{id: characterSeatId, characterId: null}]
@@ -646,7 +692,8 @@ export default class MatchServer {
             teams: {
                 [(<Team> radiant.team).id]: {score: 0},
                 [(<Team> dire.team).id]: {score: 0}
-            }
+            },
+            characterClients: {}
         };
 
         if (!this.matchRooms[matchId]) {
@@ -670,7 +717,7 @@ export default class MatchServer {
         log('isTeamFull()');
         let teamClientCount = 0;
 
-        _.forEach(this.getRoomSockets(roomId), (dummy, socketId) => {
+        _.forEach(this.getRoomClients(roomId), (dummy, socketId) => {
             const clientSession = this.clientSessions[socketId];
 
             if (clientSession && clientSession.character.teamId == teamId) {
@@ -681,7 +728,7 @@ export default class MatchServer {
         return teamClientCount >= this.maxClientsPerTeam;
     }
 
-    private getRoomSockets(roomId: string) {
+    private getRoomClients(roomId: string) {
         const room = this.socketIONamespace.adapter.rooms[roomId];
         return room ? room.sockets : {};
     }
@@ -750,6 +797,7 @@ interface RoomSession {
     teams: {[id: string]: {
         score: number;
     }};
+    characterClients: {[characterId: string]: string};
 }
 
 interface ClientSession {

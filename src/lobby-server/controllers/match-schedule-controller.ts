@@ -9,8 +9,7 @@ import Match from '../../common/models/match';
 export default function factory(diContainer: Bottle.IContainer) {
     const controller = express.Router();
     controller.get('/', (req, res, next) => {
-        // TODO
-        const itemsPerPage = 4;
+        const itemsPerPage = 8;
         const matchService: MatchService = (<any> diContainer).matchService;
         matchService.count().exec()
             .then((matchCount) => {
