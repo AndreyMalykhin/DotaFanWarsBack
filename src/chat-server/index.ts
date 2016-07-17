@@ -4,12 +4,21 @@ import ChatServer from './models/chat-server';
 
 export default class ChatServerModule implements Module {
     preBootstrap(di: Bottle) {
-        di.service('chatServer', <any> ChatServer, 'socketIO');
+        di.service(
+            'chatServer',
+            <any> ChatServer,
+            'host',
+            'port',
+            'socketIO',
+            'eventBus',
+            'socketAuthorizationService',
+            'roomService',
+            'matchCommander'
+        );
     }
 
     bootstrap(diContainer: Bottle.IContainer) {
         const server: ChatServer = (<any> diContainer).chatServer;
-        server.start();
-        return Promise.resolve();
+        return server.start();
     }
 }

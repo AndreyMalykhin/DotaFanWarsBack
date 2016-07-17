@@ -73,6 +73,11 @@ export default class MatchCommander {
         return this.roomService.saveAll(rooms);
     }
 
+    updateRoomById(id: string, fields: Object) {
+        log('updateRoomById(); id=%o', id);
+        return this.roomService.updateById(id, fields);
+    }
+
     private getMatchIds(matches: Match[]) {
         return matches.map((match) => <string> match.id);
     }

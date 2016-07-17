@@ -23,6 +23,8 @@ import Country from '../../common/models/country';
 import Item, {ItemBehavior} from '../../common/models/item';
 import Team from '../../common/models/team';
 import Translator from '../../common/utils/translator';
+import SocketAuthorizationService from
+    '../../common/utils/socket-authorization-service';
 
 const log = debug('dfw:MatchServer');
 
@@ -59,7 +61,8 @@ export default class MatchServer {
         private countryService: CountryService,
         private userCommander: UserCommander,
         private teamCommander: TeamCommander,
-        private translator: Translator
+        private translator: Translator,
+        private authorizationService: SocketAuthorizationService
     ) {
         this.url = `http://${host}:${port}/match`;
     }
@@ -91,7 +94,7 @@ export default class MatchServer {
         socket: SocketIO.Socket, next: (error?: any) => void) {
         const {accessToken, roomId, teamId} = socket.handshake.query;
         log('onPreConnect(); roomId=%o; teamId=%o', roomId, teamId);
-        this.authorizeClient(accessToken).then((user) => {
+        this.authorizationService.authorize(accessToken).then((user) => {
             if (!this.roomSessions[roomId]) {
                 next(new Error('room_not_found'));
                 return;
@@ -110,28 +113,6 @@ export default class MatchServer {
             this.addClient(roomId, socket.id, user, teamId);
             next();
         }, next);
-    }
-
-    private authorizeClient(accessToken: string) {
-        return <Promise<User>> new Promise((resolve, reject) => {
-            jwt.verify(
-                accessToken,
-                this.secretKey,
-                (error: Error, jwtPayload: any) => {
-                    if (error) {
-                        reject(error);
-                        return;
-                    }
-
-                    const userId = jwtPayload.id;
-                    this.userService.get({_id: userId}).exec()
-                    .then((user) => {
-                        user ? resolve(user) :
-                            reject(new Error(`User ${userId} not found`));
-                    }, reject);
-                }
-            );
-        });
     }
 
     private addClient(
@@ -391,7 +372,9 @@ export default class MatchServer {
         this.send(socket.broadcast.to(roomId), [
             <UpdateCharactersMsg> {
                 type: 'updateCharacters',
-                data: [this.serializeCharacter(clientSession, includePrivateData)]
+                data: [
+                    this.serializeCharacter(clientSession, includePrivateData)
+                ]
             }
         ]);
     }
@@ -656,7 +639,7 @@ export default class MatchServer {
             });
             return this.matchCommander.saveRooms(rooms);
         })
-        .then((rooms) => {
+        .then((rooms: any) => {
             this.addRooms(rooms);
         });
     }

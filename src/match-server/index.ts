@@ -20,7 +20,8 @@ export default class MatchServerModule implements Module {
             'countryService',
             'userCommander',
             'teamCommander',
-            'translator'
+            'translator',
+            'socketAuthorizationService'
         );
     }
 

@@ -6,7 +6,7 @@ import UserService from '../../common/models/user-service';
 import User from '../../common/models/user';
 import ApiResponse from '../../common/utils/api-response';
 
-export default function factory(diContainer: Bottle.IContainer) {
+export default function (diContainer: Bottle.IContainer) {
     return (
         req: express.Request,
         res: express.Response,

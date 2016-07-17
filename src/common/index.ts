@@ -19,6 +19,7 @@ import RoomService from './models/room-service';
 import ItemService from './models/item-service';
 import Translator from './utils/translator';
 import {addTranslations} from './utils/translator-utils';
+import SocketAuthorizationService from './utils/socket-authorization-service';
 
 const log = debug('dfw:CommonModule');
 
@@ -37,6 +38,12 @@ export default class CommonModule implements Module {
             return socketIO((<any> diContainer).httpServer,
                 {transports: ['websocket', 'polling']});
         });
+        di.service(
+            'socketAuthorizationService',
+            <any> SocketAuthorizationService,
+            'secretKey',
+            'userService'
+        );
         di.service('translator', <any> Translator);
         di.service('eventBus', <any> events.EventEmitter);
         di.service('dotaService', <any> DotaService, 'steamApiKey');

@@ -17,7 +17,7 @@ export default function factory(diContainer: Bottle.IContainer) {
     const userCommander: UserCommander = (<any> diContainer).userCommander;
     const translator: Translator = (<any> diContainer).translator;
 
-    controller.all('/me*', (<any> diContainer).authorizationHandler);
+    controller.all('/me*', (<any> diContainer).httpAuthorizationHandler);
 
     const maxFileSize = 1024 * 1024;
     controller.put(

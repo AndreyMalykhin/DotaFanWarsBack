@@ -14,6 +14,11 @@ export default class RoomService {
         return <Promise<Room[]>> <any> Promise.all(promises);
     }
 
+    updateById(id: string, fields: Object) {
+        log('updateById(); id=%o', id);
+        return RoomType.update({_id: id}, fields).exec();
+    }
+
     removeAll(query: Object) {
         log('removeAll(); query=%o', query);
         return RoomType.remove(query).exec();
