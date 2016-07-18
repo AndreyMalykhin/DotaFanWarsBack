@@ -223,7 +223,7 @@ export default class MatchServer {
                             }
 
                             const socket =
-                            this.socketIONamespace.connected[socketId];
+                                this.socketIONamespace.connected[socketId];
                             this.send(socket, messages);
                         }
                     );
@@ -389,14 +389,26 @@ export default class MatchServer {
     private onTakeSeat(
         socket: SocketIO.Socket, cmd: any, responseSender: ResponseSender) {
         log('onTakeSeat(); cmd=%o', cmd);
-        const {roomId, character} = this.clientSessions[socket.id];
+        const clientSession = this.clientSessions[socket.id];
+
+        if (!clientSession) {
+            responseSender([]);
+            return;
+        }
+
+        const {roomId, character} = clientSession;
         const seatId = cmd.seatId;
-        const seat = this.roomSessions[roomId].seats[seatId];
+        const roomSession = this.roomSessions[roomId];
+
+        if (!roomSession) {
+            responseSender([]);
+            return;
+        }
+
+        const seat = roomSession.seats[seatId];
         const isAlreadyTaken = seat.characterId != null;
 
         if (isAlreadyTaken) {
-            // TODO
-            log(`seat already taken`);
             responseSender([]);
             return;
         }
@@ -421,12 +433,17 @@ export default class MatchServer {
     private onBuyItem(
         socket: SocketIO.Socket, cmd: any, responseSender: ResponseSender) {
         log('onBuyItem(); cmd=%o', cmd);
-        const character = this.clientSessions[socket.id].character;
+        const clientSession = this.clientSessions[socket.id];
+
+        if (!clientSession) {
+            responseSender([]);
+            return;
+        }
+
+        const {character} = clientSession;
         const {id: characterId, money: characterMoney, items: characterItems, health: characterHealth} = character;
 
         if (characterHealth <= 0) {
-            // TODO
-            log('character dead');
             responseSender([]);
             return;
         }
@@ -435,8 +452,6 @@ export default class MatchServer {
         const price = this.items[itemId].price;
 
         if (characterMoney < price) {
-            // TODO
-            log('not enough money');
             responseSender([]);
             return;
         }
@@ -460,12 +475,17 @@ export default class MatchServer {
     private onUseItem(
         socket: SocketIO.Socket, cmd: any, responseSender: ResponseSender) {
         log('onUseItem(); cmd=%o', cmd);
-        const {character, roomId} = this.clientSessions[socket.id];
+        const clientSession = this.clientSessions[socket.id];
+
+        if (!clientSession) {
+            responseSender([]);
+            return;
+        }
+
+        const {character, roomId} = clientSession;
         const {items: characterItems, id: characterId, health: characterHealth} = character;
 
         if (characterHealth <= 0) {
-            // TODO
-            log('character dead');
             responseSender([]);
             return;
         }
@@ -473,18 +493,18 @@ export default class MatchServer {
         const {itemId} = cmd;
 
         if (!characterItems[itemId].count) {
-            // TODO
-            log('item out of stock');
             responseSender([]);
             return;
         }
 
         switch (this.items[itemId].behavior) {
         case ItemBehavior.OFFENSIVE:
-            this.useOffensiveItem(itemId, cmd.targetId, socket, responseSender);
+            this.useOffensiveItem(
+                itemId, clientSession, cmd.targetId, socket, responseSender);
             break;
         case ItemBehavior.DEFENSIVE:
-            this.useDefensiveItem(itemId, socket, responseSender);
+            this.useDefensiveItem(
+                itemId, clientSession, socket, responseSender);
             break;
         default:
             console.assert(false);
@@ -493,10 +513,11 @@ export default class MatchServer {
 
     private useDefensiveItem(
         itemId: string,
+        clientSession: ClientSession,
         socket: SocketIO.Socket,
         responseSender: ResponseSender
     ) {
-        const {character, roomId} = this.clientSessions[socket.id];
+        const {character, roomId} = clientSession;
 
         if (character.health >= this.characterMaxHealth) {
             return responseSender([]);
@@ -533,14 +554,28 @@ export default class MatchServer {
 
     private useOffensiveItem(
         itemId: string,
+        clientSession: ClientSession,
         targetId: string,
         socket: SocketIO.Socket,
         responseSender: ResponseSender
     ) {
-        const {character, roomId} = this.clientSessions[socket.id];
+        const {character, roomId} = clientSession;
         const roomSession = this.roomSessions[roomId];
+
+        if (!roomSession) {
+            responseSender([]);
+            return;
+        }
+
         const targetSocketId = roomSession.characterClients[targetId];
-        const target = this.clientSessions[targetSocketId].character;
+        const targetClientSession = this.clientSessions[targetSocketId];
+
+        if (!targetClientSession) {
+            responseSender([]);
+            return;
+        }
+
+        const target = targetClientSession.character;
 
         if (target.health <= 0) {
             responseSender([]);

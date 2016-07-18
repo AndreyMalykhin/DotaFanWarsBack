@@ -12,6 +12,7 @@ import SocketAuthorizationService from
 import RoomService from '../../common/models/room-service';
 import MatchCommander from '../../common/models/match-commander';
 import CircularBuffer from '../../common/utils/circular-buffer';
+import Translator from '../../common/utils/translator';
 
 const log = debug('dfw:ChatServer');
 
@@ -30,7 +31,8 @@ export default class ChatServer {
         private eventBus: events.EventEmitter,
         private authorizationService: SocketAuthorizationService,
         private roomService: RoomService,
-        private matchCommander: MatchCommander
+        private matchCommander: MatchCommander,
+        private translator: Translator
     ) {
         this.url = `http://${host}:${port}/chat`;
     }
@@ -114,6 +116,14 @@ export default class ChatServer {
         const updateMessagesMsgData = this.roomSessions[roomId].messages.map(
             (msg: ChatMsg) => this.serializeMsg(msg));
 
+        if (!updateMessagesMsgData.length) {
+            updateMessagesMsgData.push(this.serializeMsg({
+                id: uuid.v4(),
+                body: this.translator.t('chat.greeting'),
+                date: new Date()
+            }));
+        }
+
         this.send(socket, [
             <Msg> {type: 'start'},
             <UpdateUsersMsg> {type: 'updateUsers', data: updateUsersMsgData},
@@ -142,7 +152,13 @@ export default class ChatServer {
     private onDisconnect(socket: SocketIO.Socket) {
         log('onDisconnect()');
         const socketId = socket.id;
-        const {roomId, user} = this.clientSessions[socketId];
+        const clientSession = this.clientSessions[socketId];
+
+        if (!clientSession) {
+            return;
+        }
+
+        const {roomId, user} = clientSession;
         delete this.clientSessions[socketId];
 
         if (!this.roomSessions[roomId]) {
@@ -163,20 +179,26 @@ export default class ChatServer {
         const clientSession = this.clientSessions[socket.id];
 
         if (!clientSession) {
-            // TODO
-            log('client not exists');
             responseSender([]);
             return;
         }
 
         const {roomId, user} = clientSession;
+
+        const roomSession = this.roomSessions[roomId];
+
+        if (!roomSession) {
+            responseSender([]);
+            return;
+        }
+
         const msg = {
             id: uuid.v4(),
             body: cmd.msg,
             date: new Date(),
             senderId: <string> user.id
         };
-        this.roomSessions[roomId].messages.push(msg);
+        roomSession.messages.push(msg);
         const messages = [
             <UpdateMessagesMsg> {
                 type: 'updateMessages',
@@ -289,7 +311,7 @@ interface ChatMsg {
     id: string;
     body: string;
     date: Date;
-    senderId: string;
+    senderId?: string;
 }
 
 interface Msg {
@@ -313,6 +335,6 @@ interface UpdateMessagesMsg {
         id: string;
         body: string;
         date: string;
-        senderId: string;
+        senderId?: string;
     }[];
 }
