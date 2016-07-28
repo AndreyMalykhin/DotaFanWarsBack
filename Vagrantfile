@@ -60,6 +60,19 @@ Vagrant.configure(2) do |config|
     provider.memory = ENV['DFWB_RAM']
   end
 
+  config.vm.provider :digital_ocean do |provider, override|
+    override.ssh.private_key_path = '~/.ssh/id_rsa'
+    override.vm.box = 'digital_ocean'
+    override.vm.box_url = "https://github.com/smdahlen/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+    override.vm.synced_folder ".", projectDir, type: 'rsync', rsync__exclude: [".git/", ".vagrant/", "node_modules/", "build/"]
+    override.vm.provision :shell, path: provisionFile, args: [projectDir]
+
+    provider.token = ENV['DFWB_DIGITAL_OCEAN_TOKEN']
+    provider.image = ENV['DFWB_DIGITAL_OCEAN_IMAGE']
+    provider.region = ENV['DFWB_DIGITAL_OCEAN_REGION']
+    provider.size = ENV['DFWB_DIGITAL_OCEAN_RAM']
+  end
+
   #
   # View the documentation for the provider you are using for more
   # information on available options.

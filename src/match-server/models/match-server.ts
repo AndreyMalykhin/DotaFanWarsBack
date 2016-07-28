@@ -310,7 +310,9 @@ export default class MatchServer {
                         data: {winnerId, myRatingDelta: userRatingDelta}
                     }
                 ]);
-                socket.disconnect(true);
+                setTimeout(() => {
+                    socket.disconnect(true);
+                }, 8000);
             });
         });
     }

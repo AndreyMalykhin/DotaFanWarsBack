@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=production DFWB_DEV=0 node build/bundle.js",
+    "init": "npm install -g pm2",
+    "start": "NODE_ENV=production DFWB_DEV=0 pm2 start build/bundle.js --name dfwb",
     "build": "NODE_ENV=production DFWB_DEV=0 webpack --config webpack-config.js --progress",
     "start-dev": "NODE_ENV=development DFWB_DEV=1 DEBUG=*,-engine:*,-socket.io:*,-socket.io-parser nodemon --watch build build/bundle.js",
     "build-dev": "NODE_ENV=development DFWB_DEV=1 webpack --config webpack-config.js --watch --progress -d",

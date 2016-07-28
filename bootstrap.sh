@@ -20,7 +20,7 @@ curl -sL https://deb.nodesource.com/setup_4.x \
 if [ $DFWB_DEV = "1" ]; then
     runCmd="true"
 else
-    runCmd="npm run build && nohup npm start &"
+    runCmd="npm run build"
 fi
 
 sudo service mongod restart

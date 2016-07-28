@@ -87,7 +87,7 @@ export default class ChatServer {
             _.forEach(this.matchRooms[matchId], (roomId) => {
                 _.forEach(this.getRoomClients(roomId), (dummy, socketId) => {
                     const socket = this.socketIONamespace.connected[socketId];
-                    socket.disconnect(true);
+                    socket.disconnect();
                 });
 
                 delete this.roomSessions[roomId];
