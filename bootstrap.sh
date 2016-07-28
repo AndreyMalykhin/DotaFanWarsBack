@@ -18,13 +18,13 @@ curl -sL https://deb.nodesource.com/setup_4.x \
 && sudo apt-get -y install build-essential nodejs git mongodb-org
 
 if [ $DFWB_DEV = "1" ]; then
-    runCmd="true"
+    initCmd="npm run typings init"
 else
-    runCmd="npm run build"
+    initCmd="npm install -g pm2 && npm run build"
 fi
 
 sudo service mongod restart
 
 cd "${projectDir}" \
 && npm install --no-bin-links \
-&& ${runCmd}
+&& ${initCmd}
