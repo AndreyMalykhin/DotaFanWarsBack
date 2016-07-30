@@ -110,6 +110,14 @@ export default class MatchServer {
                 return;
             }
 
+            const isUserAlreadyConnected = _.find(
+                this.clientSessions, (session) => session.user.id == user.id);
+
+            if (isUserAlreadyConnected) {
+                next(new Error('duplicate_user'));
+                return;
+            }
+
             this.addClient(roomId, socket.id, user, teamId);
             next();
         }, next);
