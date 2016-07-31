@@ -597,7 +597,7 @@ export default class MatchServer {
         const projectileId = uuid.v4();
         roomSession.projectiles[projectileId] = {id: projectileId, targetId};
         setTimeout(() => {
-            this.hitProjectile(projectileId, target, roomSession);
+            this.hitProjectile(projectileId, character, target, roomSession);
         }, this.projectileLifetime);
 
         const updateProjectilesMsg: Msg = {
@@ -622,25 +622,29 @@ export default class MatchServer {
     }
 
     private hitProjectile(
-        projectileId: string, target: Character, roomSession: RoomSession) {
+        projectileId: string,
+        sourceCharacter: Character,
+        targetCharacter: Character,
+        roomSession: RoomSession
+    ) {
         log('hitProjectile()');
         delete roomSession.projectiles[projectileId];
         const messages: Msg[] =
             [{type: 'removeProjectiles', data: [projectileId]}];
-        const {health: targetOldHealth, teamId: targetTeamId} = target;
+        const {health: targetOldHealth, teamId: targetTeamId} = targetCharacter;
 
         if (targetOldHealth > 0) {
-            target.health =
+            targetCharacter.health =
                 Math.max(targetOldHealth - this.offensiveItemPower, 0);
-            const targetNewHealth = target.health;
+            const targetNewHealth = targetCharacter.health;
 
             if (targetNewHealth <= 0) {
-                ++roomSession.teams[targetTeamId].score;
+                ++roomSession.teams[sourceCharacter.teamId].score;
             }
 
             messages.push(<UpdateCharactersMsg> {
                 type: 'updateCharacters',
-                data: [{id: target.id, health: targetNewHealth}]
+                data: [{id: targetCharacter.id, health: targetNewHealth}]
             });
         }
 
